@@ -1,6 +1,3 @@
-# 電卓のやられサーバ
+# やられサーバのサンプル集
 
-```sh
-docker-compose up
-nc localhost 4444
-```
+ここに電卓やCTFの問題とかを置く
