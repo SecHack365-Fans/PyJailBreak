@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  writeme:
+    build:
+      context: .
+    working_dir: /home/satoki
+    restart: always
+    ports:
+      - "4444:4444"
