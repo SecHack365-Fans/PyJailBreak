@@ -21,44 +21,45 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ScanRequest'
+              type: object
+              properties:
+                endpoint:
+                  type: string
+                  example: https://localhost:8080
+                payload:
+                  type: string
+                  description: Payload String for PyJail
+                  example: __import__('os').system('echo "Expected String"')
+                expected:
+                  type: string
+                  description: Expected String for Payload executed
+                  example: Expected String
+              required:
+                - endpoint
+                - payload
+                - expected
+            example:
+              host: https://localhost:8080
+              payload: __import__('os').system('echo "Expected String"')
+              expected: Expected String
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScanResponse'
-
-components:
-  schemas:
-    ScanRequest:
-      type: object
-      properties:
-        endpoint:
-          type: string
-          example: https://localhost:8080
-        payload:
-          type: string
-          description: Payload String for PyJail
-          example: __import__('os').system('echo "Expected String"')
-        expected:
-          type: string
-          description: Expected String for Payload executed
-          example: Expected String
-      required:
-        - endpoint
-        - payload
-        - expected
-    ScanResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        type:
-          type: string
-          enum: [Safe, Warning, Critical]
-          example: Critical
-          description: Severity of the vulnerability (only `success` is `true`)
-      required:
-        - success
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  severity:
+                    type: string
+                    enum: [Safe, Warning, Critical]
+                    example: Critical
+                    description: Severity of the vulnerability (only `success` is `true`)
+                required:
+                  - success
+              example:
+                success: true
+                severity: Critical
