@@ -5,5 +5,5 @@
 
 module.exports = {
   reactStrictMode: true,
-  basePath: "/research",
+  basePath: "/PyJailBreak",
 };
