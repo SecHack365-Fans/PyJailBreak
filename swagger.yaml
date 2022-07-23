@@ -29,10 +29,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ScanResponse'
-        '400':
-          description: 面倒なので返さなくていいよ
-        '500':
-          description: 面倒なので返さなくていいよ
 
 components:
   schemas:
