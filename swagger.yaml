@@ -1,0 +1,68 @@
+openapi: "3.0.0"
+info:
+  title: PyJailBreak API
+  version: "1.0.0"
+  description: Black box automated vulnerability scanning tool for Python socket servers
+  contact:
+    name: satoki & xryuseix
+    url: https://github.com/SecHack365-Fans
+  license:
+    name: MIT
+    url: https://github.com/SecHack365-Fans/PyJailBreak/blob/main/LICENSE
+servers:
+  - url: TBD
+
+paths:
+  /scan:
+    post:
+      summary: Scan a server for vulnerabilities
+      description: フロントで入力したものを受け取って、netcatで攻撃対象のエンドポイントへ攻撃する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResponse'
+        '400':
+          description: 面倒なので返さなくていいよ
+        '500':
+          description: 面倒なので返さなくていいよ
+
+components:
+  schemas:
+    ScanRequest:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          example: https://localhost:8080
+        payload:
+          type: string
+          description: Payload String for PyJail
+          example: __import__('os').system('echo "Expected String"')
+        expected:
+          type: string
+          description: Expected String for Payload executed
+          example: Expected String
+      required:
+        - endpoint
+        - payload
+        - expected
+    ScanResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        type:
+          type: string
+          enum: [Safe, Warning, Critical]
+          example: Critical
+          description: Severity of the vulnerability (only `success` is `true`)
+      required:
+        - success
