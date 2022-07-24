@@ -1,7 +1,3 @@
-const Navigator: React.FC = () => (
-  <div>
-    ナビゲーションバー
-  </div>
-);
+const Navigator: React.FC = () => <div>ナビゲーションバー</div>;
 
 export default Navigator;
