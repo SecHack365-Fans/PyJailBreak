@@ -10,14 +10,6 @@
     "prepare": "cd .. && husky install webconsole/.husky",
     "start": "next start"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "yarn run lint"
-    ],
-    "*.{js,jsx,ts,tsx,md,json}": [
-      "yarn run format"
-    ]
-  },
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
