@@ -7,7 +7,7 @@
     "export": "next export",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json}\"",
     "lint": "next lint",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install webconsole/.husky",
     "start": "next start"
   },
   "lint-staged": {
@@ -19,7 +19,6 @@
     ]
   },
   "dependencies": {
-    "husky": "^8.0.1",
     "next": "12.2.3",
     "next-swagger-doc": "^0.3.4",
     "react": "18.2.0",
@@ -31,6 +30,7 @@
     "@types/react": "18.0.15",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
+    "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "typescript": "4.7.4"
