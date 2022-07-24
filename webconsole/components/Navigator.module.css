@@ -1,0 +1,38 @@
+/** @format */
+
+.navbar {
+  background-color: #353a40;
+  height: 2em;
+}
+
+/* タイトルロゴ */
+.logo {
+  height: 2em;
+}
+
+/* ボタン */
+.button {
+  height: 100%;
+  color: #eee;
+}
+.button:hover {
+  background-color: #434952;
+}
+.icon {
+  margin-right: 5px;
+}
+
+/* ボタンの左/右揃え */
+.left {
+  height: 100%;
+  padding: auto;
+  display: flex;
+  justify-content: center;
+  margin: auto auto auto 0;
+}
+.right {
+  padding: auto;
+  display: flex;
+  justify-content: center;
+  margin: auto 0 auto auto;
+}
