@@ -39,7 +39,7 @@ paths:
                 - payload
                 - expected
             example:
-              host: https://localhost:8080
+              endpoint: https://localhost:8080
               payload: __import__('os').system('echo "Expected String"')
               expected: Expected String
       responses:
