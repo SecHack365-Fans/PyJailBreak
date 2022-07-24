@@ -7,8 +7,9 @@ const Layout: React.FC<{
   children?: JSX.Element[] | JSX.Element;
   title?: string;
   description?: string;
-}> = ({ children, title, description }) => (
-  <main>
+  styles?: string;
+}> = ({ children, title, description, styles }) => (
+  <main className={styles}>
     <Header title={title} description={description} />
     <Navigator />
     <div style={{ padding: "15px" }}>{children}</div>

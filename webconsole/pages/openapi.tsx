@@ -1,19 +1,24 @@
+/** @format */
+
 import dynamic from "next/dynamic";
-import Head from "next/head";
+import Layout from "../components/Layout";
 import "swagger-ui-react/swagger-ui.css";
+import styles from "../styles/OpenAPI.module.css";
 
 const SwaggerUI = dynamic<{ url: string }>(import("swagger-ui-react"), {
   ssr: false,
 });
 
-export default function Index() {
+const OpenAPI = () => {
   return (
-    <div>
-      <Head>
-        <title>Swagger Doc for PyJailBreak API</title>
-        <meta name="description" content="Swagger Doc for PyJailBreak API" />
-      </Head>
+    <Layout
+      title="Swagger Doc for PyJailBreak API"
+      description="Swagger Doc for PyJailBreak API"
+      styles={styles.body}
+    >
       <SwaggerUI url="./swagger.yaml" />
-    </div>
+    </Layout>
   );
-}
+};
+
+export default OpenAPI;
