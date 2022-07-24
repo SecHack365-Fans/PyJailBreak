@@ -1,0 +1,14 @@
+/** @format */
+
+.body {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.scroll {
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll::-webkit-scrollbar {
+  display: none;
+}

@@ -3,6 +3,7 @@
 import type { NextPage } from "next";
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
+import RequestForm from "../components/RequestForm";
 
 const Home: NextPage = () => {
   return (
@@ -22,6 +23,9 @@ const Home: NextPage = () => {
           <br />
           for Python socket servers.
         </div>
+      </div>
+      <div>
+        <RequestForm />
       </div>
     </Layout>
   );

@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.1",
+    "@mui/x-data-grid": "^5.14.0",
     "next": "12.2.3",
     "next-swagger-doc": "^0.3.4",
     "react": "18.2.0",
