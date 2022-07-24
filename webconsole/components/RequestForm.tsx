@@ -1,29 +1,12 @@
 /** @format */
 
 import React from "react";
+import InputFile from "./InputFile";
+import { SeverityT, PayloadT, FormStateT } from "../models/PayloadsT";
 import { TextField, Chip } from "@mui/material";
-import {
-  DataGrid,
-  GridColDef,
-  GridRowId,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { Check, WarningAmber, Cancel, HelpOutline } from "@mui/icons-material";
 import styles from "./RequestForm.module.css";
-
-type SeverityT = "Safe" | "Warning" | "Critical" | undefined;
-type PayloadT = Readonly<{
-  payload: string;
-  expected: string;
-  severity: SeverityT;
-}>;
-type SelectedT = Readonly<GridRowId[]>;
-
-type FormStateT = Readonly<{
-  endpoint: string;
-  payloads: PayloadT[];
-  selections: SelectedT;
-}>;
 
 class RequestForm extends React.Component<{}, FormStateT> {
   constructor(props: {}) {
@@ -35,7 +18,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
     };
   }
   // 後にIDは自動で付与するので、このブロックは消す
-  payloads: (PayloadT & Readonly<{ id: number }>)[] = [
+  payloads: PayloadT[] = [
     {
       id: 1,
       payload: "__import__('os').system('echo \"Expected String\"')",
@@ -139,6 +122,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
   render() {
     return (
       <div className={styles.body}>
+        <InputFile defaultValue={this.payloads} />
         <TextField
           label="Endpoint"
           variant="outlined"
