@@ -3,6 +3,7 @@
 .navbar {
   background-color: #353a40;
   height: 2em;
+  border-bottom: #bbb solid 1px;
 }
 
 /* タイトルロゴ */
