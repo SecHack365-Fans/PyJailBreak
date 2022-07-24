@@ -3,6 +3,7 @@
 .body {
   max-width: 1200px;
   margin: 0 auto;
+  text-align: center;
 }
 .scroll {
   overflow: scroll;
@@ -11,4 +12,8 @@
 }
 .scroll::-webkit-scrollbar {
   display: none;
+}
+
+.textfield {
+  
 }

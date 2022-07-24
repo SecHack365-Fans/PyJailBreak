@@ -139,13 +139,30 @@ class RequestForm extends React.Component<{}, FormStateT> {
   render() {
     return (
       <div className={styles.body}>
-        {/* 身にくいけど後で頑張って見やすくする */}
-        {/* sx=? じゃダメだった */}
         <TextField
           label="Endpoint"
-          variant="standard"
+          variant="outlined"
           placeholder="https://localhost:8080"
-          fullWidth
+          required
+          sx={{
+            width: "70%",
+            maxWidth: "600px",
+            marginBottom: "1rem",
+            "& label": {
+              color: "#eee",
+            },
+            "& .MuiInputBase-input": {
+              color: "#ccc",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#ccc",
+              },
+              "&:hover fieldset": {
+                borderColor: "#ddd",
+              },
+            },
+          }}
         />
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
@@ -153,6 +170,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
             columns={this.columns}
             pageSize={5}
             checkboxSelection
+            disableSelectionOnClick
             onSelectionModelChange={(selections) =>
               this.setState({ ...this.state, selections: selections })
             }
