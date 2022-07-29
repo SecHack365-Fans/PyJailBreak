@@ -2,17 +2,17 @@
   {
     "payload": "__import__('os').system('echo \"Expected String\"')",
     "expected": "Expected String",
-    "severity": "Safe"
+    "severity": "safe"
   },
   {
     "payload": "__import__('os').system('echo \"Expected String is Toooooo Long\"')",
     "expected": "Expected String is Toooooo Long",
-    "severity": "Warning"
+    "severity": "warning"
   },
   {
     "payload": "__import__('os').system('echo \"Dangerous\"')",
     "expected": "Dangerous",
-    "severity": "Critical"
+    "severity": "critical"
   },
   {
     "payload": "print(1)",

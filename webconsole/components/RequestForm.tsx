@@ -53,7 +53,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       headerName: "Scan Result",
       flex: 1,
       renderCell: (params: GridValueGetterParams) =>
-        makeStatusChip(params.row.severity),
+        makeStatusChip(params.row.severity).chip,
     },
   ];
   setPayloads = (payloads: PayloadsT) => {
