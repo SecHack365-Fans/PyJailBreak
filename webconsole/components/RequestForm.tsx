@@ -2,10 +2,11 @@
 
 import React from "react";
 import InputFile from "./InputFile";
-import { PayloadT, FormStateT } from "../models/PayloadsT";
+import { FormStateT } from "../models/PayloadsT";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { makeStatusChip } from "./statusChip";
+import { payloads } from "./payloads";
 import styles from "./RequestForm.module.css";
 
 class RequestForm extends React.Component<{}, FormStateT> {
@@ -13,38 +14,10 @@ class RequestForm extends React.Component<{}, FormStateT> {
     super(props);
     this.state = {
       endpoint: "",
-      payloads: this.payloads,
+      payloads: payloads,
       selections: [],
     };
   }
-  // 後にIDは自動で付与するので、このブロックは消す
-  private payloads: PayloadT[] = [
-    {
-      id: 1,
-      payload: "__import__('os').system('echo \"Expected String\"')",
-      expected: "Expected String",
-      severity: "Safe",
-    },
-    {
-      id: 2,
-      payload:
-        "__import__('os').system('echo \"Expected String is Toooooo Long\"')",
-      expected: "Expected String is Toooooo Long",
-      severity: "Warning",
-    },
-    {
-      id: 3,
-      payload: "__import__('os').system('echo \"Dangerous\"')",
-      expected: "Dangerous",
-      severity: "Critical",
-    },
-    {
-      id: 4,
-      payload: "print(1)",
-      expected: "1",
-      severity: undefined,
-    },
-  ];
   scrollStyle = {
     overflow: "scroll",
     scrollbarWidth: "none",
