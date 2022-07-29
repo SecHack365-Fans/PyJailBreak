@@ -62,7 +62,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       payloads: payloads,
     });
   };
-  setFileReadError = (err: string) => {
+  setFileReadError = (err: string | null) => {
     this.setState({
       errorMsg: err,
     });
@@ -75,11 +75,10 @@ class RequestForm extends React.Component<{}, FormStateT> {
           <input
             type="file"
             hidden
-            onChange={(err) => {
-              this.setState({
-                errorMsg: null,
-              });
-              onChangeInputFile(err, this.setPayloads, this.setFileReadError);
+            accept=".json"
+            onChange={(e) => {
+              onChangeInputFile(e, this.setPayloads, this.setFileReadError);
+              e.target.value = "";
             }}
           />
         </Button>
