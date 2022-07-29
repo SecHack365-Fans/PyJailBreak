@@ -13,3 +13,7 @@
 .scroll::-webkit-scrollbar {
   display: none;
 }
+
+.errMsg {
+  margin: auto 0;
+}

@@ -66,7 +66,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       errorMsg: err,
     });
   };
-  ImportPayloads = () => (
+  DataGridFooters = () => (
     <Box sx={{ p: 1, display: "flex" }}>
       <Tooltip title="Upload Payloads">
         <Button component="label" sx={{ color: "#eee" }}>
@@ -74,9 +74,12 @@ class RequestForm extends React.Component<{}, FormStateT> {
           <input
             type="file"
             hidden
-            onChange={(err) =>
-              onChangeInputFile(err, this.setPayloads, this.setFileReadError)
-            }
+            onChange={(err) => {
+              this.setState({
+                errorMsg: null,
+              });
+              onChangeInputFile(err, this.setPayloads, this.setFileReadError);
+            }}
           />
         </Button>
       </Tooltip>
@@ -100,6 +103,9 @@ class RequestForm extends React.Component<{}, FormStateT> {
           <FileDownload />
         </Button>
       </Tooltip>
+      {this.state.errorMsg && (
+        <p className={styles.errMsg}>Error: {this.state.errorMsg}</p>
+      )}
     </Box>
   );
   render() {
@@ -130,7 +136,6 @@ class RequestForm extends React.Component<{}, FormStateT> {
             },
           }}
         />
-        {this.state.errorMsg}
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             rows={this.state.payloads}
@@ -141,7 +146,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
               this.setState({ ...this.state, selections: selections })
             }
             components={{
-              Footer: this.ImportPayloads,
+              Footer: this.DataGridFooters,
             }}
             sx={{
               color: "#eee",
