@@ -85,7 +85,16 @@ class RequestForm extends React.Component<{}, FormStateT> {
           component="label"
           sx={{ color: "#eee" }}
           onClick={() => {
-            downloadFile({}, "aaa.json");
+            downloadFile(
+              this.state.payloads.map((payload) => {
+                return {
+                  payload: payload.payload,
+                  expected: payload.expected,
+                  severity: payload.severity,
+                };
+              }),
+              "payloads.json"
+            );
           }}
         >
           <FileDownload />
