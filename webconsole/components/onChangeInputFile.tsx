@@ -37,7 +37,7 @@ export const onChangeInputFile = (
     const userPayloads = Base64.decode(
       userBase64Payloads(e.target.result).split(",")[1]
     );
-    console.log(userPayloads);
+    console.log("Read: ", userPayloads);
     let parsedJson: PayloadsT = [{}];
     try {
       parsedJson = JSON.parse(userPayloads);

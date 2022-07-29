@@ -10,6 +10,7 @@ import { payloads } from "./payloads";
 import { downloadFile } from "./downloadFile";
 import styles from "./RequestForm.module.css";
 import { FileUpload, FileDownload } from "@mui/icons-material";
+import { ShakeLittle } from "reshake";
 
 class RequestForm extends React.Component<{}, FormStateT> {
   constructor(props: {}) {
@@ -19,6 +20,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       payloads: payloads,
       selections: [],
       errorMsg: null,
+      errShakeActive: true,
     };
   }
   scrollStyle = {
@@ -66,6 +68,11 @@ class RequestForm extends React.Component<{}, FormStateT> {
     this.setState({
       errorMsg: err,
     });
+    setTimeout(() => {
+      this.setState({
+        errShakeActive: false,
+      });
+    }, 500);
   };
   DataGridFooters = () => (
     <Box sx={{ p: 1, display: "flex" }}>
@@ -104,7 +111,13 @@ class RequestForm extends React.Component<{}, FormStateT> {
         </Button>
       </Tooltip>
       {this.state.errorMsg && (
-        <p className={styles.errMsg}>Error: {this.state.errorMsg}</p>
+        <ShakeLittle
+          active={this.state.errShakeActive}
+          fixed={true}
+          className={styles.errMsg}
+        >
+          Error: {this.state.errorMsg}
+        </ShakeLittle>
       )}
     </Box>
   );

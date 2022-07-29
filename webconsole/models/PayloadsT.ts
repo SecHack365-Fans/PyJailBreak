@@ -23,4 +23,5 @@ export type FormStateT = Readonly<{
   payloads: PayloadT[];
   selections: SelectedT;
   errorMsg: string | null;
+  errShakeActive: boolean;
 }>;
