@@ -3,11 +3,13 @@
 import React from "react";
 import { onChangeInputFile } from "./onChangeInputFile";
 import { FormStateT, PayloadsT } from "../models/PayloadsT";
-import { TextField } from "@mui/material";
+import { TextField, Button, Box, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { makeStatusChip } from "./statusChip";
 import { payloads } from "./payloads";
+import { downloadFile } from "./downloadFile";
 import styles from "./RequestForm.module.css";
+import { FileUpload, FileDownload } from "@mui/icons-material";
 
 class RequestForm extends React.Component<{}, FormStateT> {
   constructor(props: {}) {
@@ -55,7 +57,6 @@ class RequestForm extends React.Component<{}, FormStateT> {
     },
   ];
   setPayloads = (payloads: PayloadsT) => {
-    console.log(payloads);
     this.setState({
       payloads: payloads,
     });
@@ -65,6 +66,33 @@ class RequestForm extends React.Component<{}, FormStateT> {
       errorMsg: err,
     });
   };
+  ImportPayloads = () => (
+    <Box sx={{ p: 1, display: "flex" }}>
+      <Tooltip title="Upload Payloads">
+        <Button component="label" sx={{ color: "#eee" }}>
+          <FileUpload />
+          <input
+            type="file"
+            hidden
+            onChange={(err) =>
+              onChangeInputFile(err, this.setPayloads, this.setFileReadError)
+            }
+          />
+        </Button>
+      </Tooltip>
+      <Tooltip title="Download Payloads">
+        <Button
+          component="label"
+          sx={{ color: "#eee" }}
+          onClick={() => {
+            downloadFile({}, "aaa.json");
+          }}
+        >
+          <FileDownload />
+        </Button>
+      </Tooltip>
+    </Box>
+  );
   render() {
     return (
       <div className={styles.body}>
@@ -93,12 +121,6 @@ class RequestForm extends React.Component<{}, FormStateT> {
             },
           }}
         />
-        <input
-          type="file"
-          onChange={(err) =>
-            onChangeInputFile(err, this.setPayloads, this.setFileReadError)
-          }
-        />
         {this.state.errorMsg}
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
@@ -109,6 +131,9 @@ class RequestForm extends React.Component<{}, FormStateT> {
             onSelectionModelChange={(selections) =>
               this.setState({ ...this.state, selections: selections })
             }
+            components={{
+              Footer: this.ImportPayloads,
+            }}
             sx={{
               color: "#eee",
             }}

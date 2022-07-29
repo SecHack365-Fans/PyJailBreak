@@ -19,6 +19,15 @@ export const payloads: PayloadsT = [
     expected: "Dangerous",
     severity: "Critical",
   },
+  {
+    payload: "__import__('os').system('sleep 100')",
+    expected: "",
+    severity: "Executing",
+  },
+  {
+    payload: "print('1')",
+    expected: "1",
+  },
 ].map((payload: PayloadT, id) => ({
   id: id,
   ...payload,
