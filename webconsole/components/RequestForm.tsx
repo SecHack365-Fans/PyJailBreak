@@ -2,10 +2,10 @@
 
 import React from "react";
 import InputFile from "./InputFile";
-import { SeverityT, PayloadT, FormStateT } from "../models/PayloadsT";
-import { TextField, Chip } from "@mui/material";
+import { PayloadT, FormStateT } from "../models/PayloadsT";
+import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { Check, WarningAmber, Cancel, HelpOutline } from "@mui/icons-material";
+import { makeStatusChip } from "./statusChip";
 import styles from "./RequestForm.module.css";
 
 class RequestForm extends React.Component<{}, FormStateT> {
@@ -13,12 +13,12 @@ class RequestForm extends React.Component<{}, FormStateT> {
     super(props);
     this.state = {
       endpoint: "",
-      payloads: [],
+      payloads: this.payloads,
       selections: [],
     };
   }
   // 後にIDは自動で付与するので、このブロックは消す
-  payloads: PayloadT[] = [
+  private payloads: PayloadT[] = [
     {
       id: 1,
       payload: "__import__('os').system('echo \"Expected String\"')",
@@ -45,45 +45,6 @@ class RequestForm extends React.Component<{}, FormStateT> {
       severity: undefined,
     },
   ];
-  makeStatusChip = (severity: SeverityT) => {
-    if (severity === "Safe") {
-      return (
-        <Chip
-          variant="outlined"
-          color="success"
-          label={severity}
-          icon={<Check />}
-        />
-      );
-    } else if (severity === "Warning") {
-      return (
-        <Chip
-          variant="outlined"
-          color="warning"
-          label={severity}
-          icon={<WarningAmber />}
-        />
-      );
-    } else if (severity === "Critical") {
-      return (
-        <Chip
-          variant="outlined"
-          color="error"
-          label={severity}
-          icon={<Cancel />}
-        />
-      );
-    } else {
-      return (
-        <Chip
-          variant="outlined"
-          color="info"
-          label="Not Finished"
-          icon={<HelpOutline />}
-        />
-      );
-    }
-  };
   scrollStyle = {
     overflow: "scroll",
     scrollbarWidth: "none",
@@ -116,7 +77,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       headerName: "Scan Result",
       flex: 1,
       renderCell: (params: GridValueGetterParams) =>
-        this.makeStatusChip(params.row.severity),
+        makeStatusChip(params.row.severity),
     },
   ];
   render() {
