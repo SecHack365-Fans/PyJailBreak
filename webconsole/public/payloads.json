@@ -1,12 +1,12 @@
 [
   {
-    "payload": "__import__('os').system('echo \"expected String\"')",
-    "expected": "expected String",
+    "payload": "__import__('os').system('echo \"Expected String\"')",
+    "expected": "Expected String",
     "severity": "Safe"
   },
   {
-    "payload": "__import__('os').system('echo \"expected String is Toooooo Long\"')",
-    "expected": "expected String is Toooooo Long",
+    "payload": "__import__('os').system('echo \"Expected String is Toooooo Long\"')",
+    "expected": "Expected String is Toooooo Long",
     "severity": "Warning"
   },
   {

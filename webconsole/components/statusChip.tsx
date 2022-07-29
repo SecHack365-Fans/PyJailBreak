@@ -2,7 +2,14 @@
 
 import { SeverityT } from "../models/PayloadsT";
 import { Chip } from "@mui/material";
-import { Check, WarningAmber, Cancel, HelpOutline } from "@mui/icons-material";
+import {
+  Check,
+  WarningAmber,
+  Cancel,
+  HelpOutline,
+  Loop,
+} from "@mui/icons-material";
+import styles from "./statusChip.module.css";
 
 export const makeStatusChip = (severity: SeverityT) => {
   if (severity === "Safe") {
@@ -12,6 +19,7 @@ export const makeStatusChip = (severity: SeverityT) => {
         color="success"
         label={severity}
         icon={<Check />}
+        sx={{ fontWeight: "bold", borderWidth: "2px" }}
       />
     );
   } else if (severity === "Warning") {
@@ -30,6 +38,15 @@ export const makeStatusChip = (severity: SeverityT) => {
         color="error"
         label={severity}
         icon={<Cancel />}
+      />
+    );
+  } else if (severity === "Executing") {
+    return (
+      <Chip
+        variant="outlined"
+        color="info"
+        label={severity}
+        icon={<Loop className={styles.rotateIcon} />}
       />
     );
   } else {
