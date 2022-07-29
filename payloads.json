@@ -1,24 +1,20 @@
 [
   {
-    "id": 1,
     "payload": "__import__('os').system('echo \"expected String\"')",
     "expected": "expected String",
     "severity": "Safe"
   },
   {
-    "id": 2,
     "payload": "__import__('os').system('echo \"expected String is Toooooo Long\"')",
     "expected": "expected String is Toooooo Long",
     "severity": "Warning"
   },
   {
-    "id": 3,
     "payload": "__import__('os').system('echo \"Dangerous\"')",
     "expected": "Dangerous",
     "severity": "Critical"
   },
   {
-    "id": 4,
     "payload": "print(1)",
     "expected": "1"
   }
