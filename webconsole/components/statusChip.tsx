@@ -1,6 +1,5 @@
 /** @format */
 
-import { SeverityT } from "../models/PayloadsT";
 import { Chip } from "@mui/material";
 import {
   Check,
@@ -9,10 +8,24 @@ import {
   HelpOutline,
   Loop,
 } from "@mui/icons-material";
+import { GridComparatorFn } from "@mui/x-data-grid";
+import { SeverityT } from "../models/PayloadsT";
+import { ChipT, ChipsT } from "../models/statusChipT";
 import styles from "./statusChip.module.css";
 
-const statusChip = (severity: SeverityT) => {
+const statusChip = (severity: SeverityT): ChipsT => {
   return {
+    executing: {
+      priority: 0,
+      chip: (
+        <Chip
+          variant="outlined"
+          color="info"
+          label={severity}
+          icon={<Loop className={styles.rotateIcon} />}
+        />
+      ),
+    },
     safe: {
       priority: 1,
       chip: (
@@ -47,21 +60,10 @@ const statusChip = (severity: SeverityT) => {
         />
       ),
     },
-    executing: {
-      priority: 0,
-      chip: (
-        <Chip
-          variant="outlined"
-          color="info"
-          label={severity}
-          icon={<Loop className={styles.rotateIcon} />}
-        />
-      ),
-    },
   };
 };
 
-export const makeStatusChip = (severity: SeverityT) => {
+export const makeStatusChip = (severity: SeverityT): ChipT => {
   const chip = statusChip(severity);
   if (typeof severity === "undefined" || !(severity in chip)) {
     return {
@@ -78,4 +80,21 @@ export const makeStatusChip = (severity: SeverityT) => {
   } else {
     return chip[severity];
   }
+};
+
+export const resultsComparator: GridComparatorFn = (
+  severityL?: SeverityT,
+  severityR?: SeverityT
+) => {
+  if (typeof severityL === "undefined") {
+    return 1;
+  }
+  if (typeof severityR === "undefined") {
+    return -1;
+  }
+  const priorityL = (statusChip(severityL)[severityL] as ChipT).priority;
+  const priorityR = (statusChip(severityR)[severityR] as ChipT).priority;
+  if (priorityL === priorityR) return 0;
+  if (priorityL < priorityR) return -1;
+  if (priorityL > priorityR) return 1;
 };

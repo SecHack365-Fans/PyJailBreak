@@ -5,7 +5,7 @@ import { onChangeInputFile } from "./onChangeInputFile";
 import { FormStateT, PayloadsT } from "../models/PayloadsT";
 import { TextField, Button, Box, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { makeStatusChip } from "./statusChip";
+import { makeStatusChip, resultsComparator } from "./statusChip";
 import { payloads } from "./payloads";
 import { downloadFile } from "./downloadFile";
 import styles from "./RequestForm.module.css";
@@ -54,6 +54,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       flex: 1,
       renderCell: (params: GridValueGetterParams) =>
         makeStatusChip(params.row.severity).chip,
+      sortComparator: resultsComparator,
     },
   ];
   setPayloads = (payloads: PayloadsT) => {
