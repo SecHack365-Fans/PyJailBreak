@@ -1,8 +1,8 @@
 /** @format */
 
 import React from "react";
-import InputFile from "./InputFile";
-import { FormStateT } from "../models/PayloadsT";
+import { onChangeInputFile } from "./onChangeInputFile";
+import { FormStateT, PayloadsT } from "../models/PayloadsT";
 import { TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { makeStatusChip } from "./statusChip";
@@ -16,6 +16,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
       endpoint: "",
       payloads: payloads,
       selections: [],
+      errorMsg: null,
     };
   }
   scrollStyle = {
@@ -53,10 +54,20 @@ class RequestForm extends React.Component<{}, FormStateT> {
         makeStatusChip(params.row.severity),
     },
   ];
+  setPayloads = (payloads: PayloadsT) => {
+    console.log(payloads);
+    this.setState({
+      payloads: payloads,
+    });
+  };
+  setFileReadError = (err: string) => {
+    this.setState({
+      errorMsg: err,
+    });
+  };
   render() {
     return (
       <div className={styles.body}>
-        <InputFile defaultValue={this.payloads} />
         <TextField
           label="Endpoint"
           variant="outlined"
@@ -82,11 +93,17 @@ class RequestForm extends React.Component<{}, FormStateT> {
             },
           }}
         />
+        <input
+          type="file"
+          onChange={(err) =>
+            onChangeInputFile(err, this.setPayloads, this.setFileReadError)
+          }
+        />
+        {this.state.errorMsg}
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={this.payloads}
+            rows={this.state.payloads}
             columns={this.columns}
-            pageSize={5}
             checkboxSelection
             disableSelectionOnClick
             onSelectionModelChange={(selections) =>
