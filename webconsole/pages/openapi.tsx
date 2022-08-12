@@ -1,7 +1,7 @@
 /** @format */
 
 import dynamic from "next/dynamic";
-import Layout from "../components/Layout";
+import { Layout } from "../components/Layout";
 import "swagger-ui-react/swagger-ui.css";
 import styles from "../styles/OpenAPI.module.css";
 

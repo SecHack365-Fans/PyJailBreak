@@ -1,7 +1,7 @@
 /** @format */
 
 import type { NextPage } from "next";
-import Layout from "../components/Layout";
+import { Layout } from "../components/Layout";
 import styles from "../styles/Home.module.css";
 import RequestForm from "../components/RequestForm";
 

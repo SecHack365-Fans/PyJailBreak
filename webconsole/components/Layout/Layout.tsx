@@ -3,7 +3,7 @@
 import Header from "./Header";
 import Navigator from "./Navigator";
 
-const Layout: React.FC<{
+export const Layout: React.FC<{
   children?: JSX.Element[] | JSX.Element;
   title?: string;
   description?: string;
@@ -15,5 +15,3 @@ const Layout: React.FC<{
     <div style={{ padding: "15px" }}>{children}</div>
   </main>
 );
-
-export default Layout;
