@@ -12,45 +12,65 @@ import styles from "./RequestForm.module.css";
 import { FileUpload, FileDownload } from "@mui/icons-material";
 import { ShakeLittle } from "reshake";
 import { useDispatch, useSelector } from "react-redux";
-import { getAPIUrlState, setAPIUrl } from "../models/endPointsSlice";
+import {
+  getAPIUrlState,
+  getAttackUrlState,
+  setAPIUrl,
+  setAttackUrl,
+} from "../models/endPointsSlice";
 import { getJsonErrMsg, setJsonErrMsg } from "../models/errorSlice";
 import { setPayloads, setSelections } from "../models/payloadsSlice";
 
 const RequestForm = () => {
   const dispatch = useDispatch();
+  dispatch(setPayloads(payloads));
   const apiUrl = useSelector(getAPIUrlState);
+  const attackUrl = useSelector(getAttackUrlState);
+  const textFieldStyle = {
+    width: "40%",
+    maxWidth: "600px",
+    mr: "2px",
+    ml: "2px",
+    marginBottom: "1rem",
+    "& label": {
+      color: "#eee",
+    },
+    "& .MuiInputBase-input": {
+      color: "#ccc",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "#ccc",
+      },
+      "&:hover fieldset": {
+        borderColor: "#ddd",
+      },
+    },
+  };
   return (
     <div className={styles.body}>
       <TextField
         required
-        label="Endpoint"
+        label="Endpoint for PyJailBreak Server"
         variant="outlined"
         placeholder="https://localhost:8080"
         value={apiUrl}
         onChange={(e) => {
           dispatch(setAPIUrl(e.target.value));
         }}
-        sx={{
-          width: "70%",
-          maxWidth: "600px",
-          marginBottom: "1rem",
-          "& label": {
-            color: "#eee",
-          },
-          "& .MuiInputBase-input": {
-            color: "#ccc",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "#ccc",
-            },
-            "&:hover fieldset": {
-              borderColor: "#ddd",
-            },
-          },
-        }}
+        sx={textFieldStyle}
       />
-      <ExecuteAttack />
+      <TextField
+        required
+        label="Endpoint for Target Server"
+        variant="outlined"
+        placeholder="https://this.is.vulnable.server:8000"
+        value={attackUrl}
+        onChange={(e) => {
+          dispatch(setAttackUrl(e.target.value));
+        }}
+        sx={textFieldStyle}
+      />
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={payloads}
@@ -68,6 +88,7 @@ const RequestForm = () => {
           }}
         />
       </div>
+      <ExecuteAttack />
     </div>
   );
 };
