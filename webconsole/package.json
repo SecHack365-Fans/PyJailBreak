@@ -22,6 +22,7 @@
     "next-swagger-doc": "^0.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.3.0",
     "react-redux": "^8.0.2",
     "swagger-ui-react": "^4.13.0",
     "zod": "^3.17.10"
