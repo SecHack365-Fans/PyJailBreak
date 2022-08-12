@@ -2,7 +2,7 @@
 
 import React from "react";
 import { onChangeInputFile } from "./onChangeInputFile";
-import { FormStateT, PayloadsT } from "../models/PayloadsT";
+import ExecuteAttack from "./ExecuteAttack";
 import { TextField, Button, Box, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { makeStatusChip, resultsComparator } from "./statusChip";
@@ -11,70 +11,107 @@ import { downloadFile } from "./downloadFile";
 import styles from "./RequestForm.module.css";
 import { FileUpload, FileDownload } from "@mui/icons-material";
 import { ShakeLittle } from "reshake";
+import { useDispatch, useSelector } from "react-redux";
+import { getAPIUrlState, setAPIUrl } from "../models/endPointsSlice";
+import { getJsonErrMsg, setJsonErrMsg } from "../models/errorSlice";
+import { setPayloads, setSelections } from "../models/payloadsSlice";
 
-class RequestForm extends React.Component<{}, FormStateT> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      endpoint: "",
-      payloads: payloads,
-      selections: [],
-      errorMsg: null,
-      errShakeActive: true,
-    };
-  }
-  scrollStyle = {
-    overflow: "scroll",
-    scrollbarWidth: "none",
-    "-ms-overflow-style": "none",
-    "::-webkit-scrollbar": {
-      display: "none",
-    },
-  };
-  columns: GridColDef[] = [
-    {
-      field: "payload",
-      headerName: "Payload",
-      flex: 1,
-      editable: true,
-      renderCell: (params: GridValueGetterParams) => (
-        <p className={styles.scroll}>{params.row.payload}</p>
-      ),
-    },
-    {
-      field: "expected",
-      headerName: "Expected Output",
-      flex: 1,
-      editable: true,
-      renderCell: (params: GridValueGetterParams) => (
-        <p className={styles.scroll}>{params.row.expected}</p>
-      ),
-    },
-    {
-      field: "severity",
-      headerName: "Scan Result",
-      flex: 1,
-      renderCell: (params: GridValueGetterParams) =>
-        makeStatusChip(params.row.severity).chip,
-      sortComparator: resultsComparator,
-    },
-  ];
-  setPayloads = (payloads: PayloadsT) => {
-    this.setState({
-      payloads: payloads,
-    });
-  };
-  setFileReadError = (err: string | null) => {
-    this.setState({
-      errorMsg: err,
-    });
+const RequestForm = () => {
+  const dispatch = useDispatch();
+  const apiUrl = useSelector(getAPIUrlState);
+  return (
+    <div className={styles.body}>
+      <TextField
+        required
+        label="Endpoint"
+        variant="outlined"
+        placeholder="https://localhost:8080"
+        value={apiUrl}
+        onChange={(e) => {
+          dispatch(setAPIUrl(e.target.value));
+        }}
+        sx={{
+          width: "70%",
+          maxWidth: "600px",
+          marginBottom: "1rem",
+          "& label": {
+            color: "#eee",
+          },
+          "& .MuiInputBase-input": {
+            color: "#ccc",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#ccc",
+            },
+            "&:hover fieldset": {
+              borderColor: "#ddd",
+            },
+          },
+        }}
+      />
+      <ExecuteAttack />
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={payloads}
+          columns={columns}
+          checkboxSelection
+          disableSelectionOnClick
+          onSelectionModelChange={(selections) =>
+            dispatch(setSelections(selections))
+          }
+          components={{
+            Footer: DataGridFooters,
+          }}
+          sx={{
+            color: "#eee",
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const columns: GridColDef[] = [
+  {
+    field: "payload",
+    headerName: "Payload",
+    flex: 1,
+    editable: true,
+    renderCell: (params: GridValueGetterParams) => (
+      <p className={styles.scroll}>{params.row.payload}</p>
+    ),
+  },
+  {
+    field: "expected",
+    headerName: "Expected Output",
+    flex: 1,
+    editable: true,
+    renderCell: (params: GridValueGetterParams) => (
+      <p className={styles.scroll}>{params.row.expected}</p>
+    ),
+  },
+  {
+    field: "severity",
+    headerName: "Scan Result",
+    flex: 1,
+    renderCell: (params: GridValueGetterParams) =>
+      makeStatusChip(params.row.severity).chip,
+    sortComparator: resultsComparator,
+  },
+];
+
+const DataGridFooters = () => {
+  const [errShakeActive, setErrShakeActive] = React.useState(true);
+  const jsonErrMsg = useSelector(getJsonErrMsg);
+  const dispatch = useDispatch();
+  const setFileReadError = (err: string | null) => {
+    dispatch(setJsonErrMsg(err));
     setTimeout(() => {
-      this.setState({
-        errShakeActive: false,
-      });
+      setErrShakeActive(false);
     }, 500);
   };
-  DataGridFooters = () => (
+  return (
     <Box sx={{ p: 1, display: "flex" }}>
       <Tooltip title="Upload Payloads">
         <Button component="label" sx={{ color: "#eee" }}>
@@ -84,7 +121,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
             hidden
             accept=".json"
             onChange={(e) => {
-              onChangeInputFile(e, this.setPayloads, this.setFileReadError);
+              onChangeInputFile(e, setPayloads, setFileReadError);
               e.target.value = "";
             }}
           />
@@ -96,7 +133,7 @@ class RequestForm extends React.Component<{}, FormStateT> {
           sx={{ color: "#eee" }}
           onClick={() => {
             downloadFile(
-              this.state.payloads.map((payload) => {
+              payloads.map((payload) => {
                 return {
                   payload: payload.payload,
                   expected: payload.expected,
@@ -110,65 +147,17 @@ class RequestForm extends React.Component<{}, FormStateT> {
           <FileDownload />
         </Button>
       </Tooltip>
-      {this.state.errorMsg && (
+      {jsonErrMsg && (
         <ShakeLittle
-          active={this.state.errShakeActive}
+          active={errShakeActive}
           fixed={true}
           className={styles.errMsg}
         >
-          Error: {this.state.errorMsg}
+          Error: {jsonErrMsg}
         </ShakeLittle>
       )}
     </Box>
   );
-  render() {
-    return (
-      <div className={styles.body}>
-        <TextField
-          label="Endpoint"
-          variant="outlined"
-          placeholder="https://localhost:8080"
-          required
-          sx={{
-            width: "70%",
-            maxWidth: "600px",
-            marginBottom: "1rem",
-            "& label": {
-              color: "#eee",
-            },
-            "& .MuiInputBase-input": {
-              color: "#ccc",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#ccc",
-              },
-              "&:hover fieldset": {
-                borderColor: "#ddd",
-              },
-            },
-          }}
-        />
-        <div style={{ height: 400, width: "100%" }}>
-          <DataGrid
-            rows={this.state.payloads}
-            columns={this.columns}
-            checkboxSelection
-            disableSelectionOnClick
-            onSelectionModelChange={(selections) =>
-              this.setState({ ...this.state, selections: selections })
-            }
-            components={{
-              Footer: this.DataGridFooters,
-            }}
-            sx={{
-              color: "#eee",
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+};
 
 export default RequestForm;

@@ -17,11 +17,3 @@ export type SeverityT = z.infer<typeof SeverityS>;
 export type PayloadT = z.infer<typeof PayloadS>;
 export type PayloadsT = z.infer<typeof PayloadsS>;
 export type SelectedT = Readonly<GridRowId[]>;
-
-export type FormStateT = Readonly<{
-  endpoint: string;
-  payloads: PayloadT[];
-  selections: SelectedT;
-  errorMsg: string | null;
-  errShakeActive: boolean;
-}>;
