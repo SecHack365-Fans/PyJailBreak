@@ -16,11 +16,13 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.1",
     "@mui/x-data-grid": "^5.14.0",
+    "@reduxjs/toolkit": "^1.8.4",
     "js-base64": "^3.7.2",
     "next": "12.2.3",
     "next-swagger-doc": "^0.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-redux": "^8.0.2",
     "swagger-ui-react": "^4.13.0",
     "zod": "^3.17.10"
   },
