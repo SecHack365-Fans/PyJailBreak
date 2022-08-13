@@ -6,7 +6,6 @@ import ExecuteAttack from "./ExecuteAttack";
 import { TextField, Button, Box, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { makeStatusChip, resultsComparator } from "./statusChip";
-import { payloads } from "./payloads";
 import { downloadFile } from "./downloadFile";
 import styles from "./RequestForm.module.css";
 import { FileUpload, FileDownload } from "@mui/icons-material";
@@ -19,19 +18,22 @@ import {
   setAttackUrl,
 } from "../models/endPointsSlice";
 import { getJsonErrMsg, setJsonErrMsg } from "../models/errorSlice";
-import { setPayloads, setSelections } from "../models/payloadsSlice";
+import {
+  getPayloads,
+  setPayloads,
+  setSelections,
+} from "../models/payloadsSlice";
+import { PayloadsT } from "../models/PayloadsT";
 
 const RequestForm = () => {
   const dispatch = useDispatch();
-  dispatch(setPayloads(payloads));
   const apiUrl = useSelector(getAPIUrlState);
   const attackUrl = useSelector(getAttackUrlState);
+  const payloads = useSelector(getPayloads);
   const textFieldStyle = {
     width: "40%",
     maxWidth: "600px",
-    mr: "2px",
-    ml: "2px",
-    marginBottom: "1rem",
+    m: "1em 2px 1em 2px",
     "& label": {
       color: "#eee",
     },
@@ -81,7 +83,7 @@ const RequestForm = () => {
             dispatch(setSelections(selections))
           }
           components={{
-            Footer: DataGridFooters,
+            Footer: () => DataGridFooters(payloads),
           }}
           sx={{
             color: "#eee",
@@ -89,6 +91,7 @@ const RequestForm = () => {
         />
       </div>
       <ExecuteAttack />
+      <pre>{JSON.stringify(payloads, null, "\t")}</pre>
     </div>
   );
 };
@@ -122,7 +125,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-const DataGridFooters = () => {
+const DataGridFooters = (payloads: PayloadsT) => {
   const [errShakeActive, setErrShakeActive] = React.useState(true);
   const jsonErrMsg = useSelector(getJsonErrMsg);
   const dispatch = useDispatch();

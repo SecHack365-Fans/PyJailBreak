@@ -14,8 +14,8 @@ type ActionT = {
 };
 
 const initialState: Url = {
-  APIUrl: "", // バックエンドのエンドポイント
-  attackUrl: "", // やられサーバのエンドポイント
+  APIUrl: "AAA", // バックエンドのエンドポイント
+  attackUrl: "AAA", // やられサーバのエンドポイント
 };
 
 export const endPointsSlice = createSlice({

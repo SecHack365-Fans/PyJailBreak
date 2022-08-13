@@ -2,7 +2,7 @@
 
 import { PayloadT, PayloadsT } from "../models/PayloadsT";
 
-export const payloads: PayloadsT = (
+export const defaultPayloads: PayloadsT = (
   [
     {
       payload: "__import__('os').system('echo \"Expected String\"')",

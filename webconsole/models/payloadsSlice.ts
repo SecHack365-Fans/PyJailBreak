@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { PayloadsT } from "./PayloadsT";
 import { GridSelectionModel } from "@mui/x-data-grid/models";
+import { defaultPayloads } from "../components/payloads";
 
 type Payloads = {
   payloads: PayloadsT;
@@ -21,7 +22,7 @@ type SelectionActionT = {
 };
 
 const initialState: Payloads = {
-  payloads: [] as PayloadsT,
+  payloads: defaultPayloads,
   selections: [] as GridSelectionModel,
 };
 
