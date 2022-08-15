@@ -23,9 +23,14 @@ paths:
             schema:
               type: object
               properties:
-                endpoint:
+                pyJailBreakUrl:
                   type: string
-                  example: https://localhost:8080
+                  description: PyJailBreak backend endpoint
+                  example: https://backend.com:8080
+                targetUrl:
+                  type: string
+                  description: Target vulnable server endpoint
+                  example: https://vulnable.com:8000
                 payload:
                   type: string
                   description: Payload String for PyJail
@@ -39,11 +44,12 @@ paths:
                 - payload
                 - expected
             example:
-              endpoint: https://localhost:8080
+              pyJailBreakUrl: https://backend.com:8080
+              targetUrl: https://vulnable.com:8000
               payload: __import__('os').system('echo "Expected String"')
               expected: Expected String
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
