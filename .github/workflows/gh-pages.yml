@@ -1,9 +1,11 @@
-name: Deploy
+name: Build Pages
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'webconsole/**'
 
 jobs:
   build-deploy:
