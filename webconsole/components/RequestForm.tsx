@@ -91,7 +91,6 @@ const RequestForm = () => {
         />
       </div>
       <ExecuteAttack />
-      <pre>{JSON.stringify(payloads, null, "\t")}</pre>
     </div>
   );
 };
