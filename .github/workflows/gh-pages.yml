@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'webconsole/**'
+      - 'website/**'
 
 jobs:
   build-deploy:
@@ -26,13 +26,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
-        run: cd webconsole && yarn install --frozen-lockfile
+        run: cd website && yarn install --frozen-lockfile
       - name: Build
-        run: cd webconsole && yarn build && yarn export
+        run: cd website && yarn build && yarn export
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: webconsole/out
+          publish_dir: website/out
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
