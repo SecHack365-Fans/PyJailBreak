@@ -5,7 +5,7 @@
 import os
 import sys
 
-#os.environ["PAGER"] = "cat" #No hitchhike :)
+os.environ["PAGER"] = "cat" #No hitchhike :)
 
 #print("""            _       _    __  _            _    __
 # _ __  _ __(_)_ __ | |_ / / | |_ _____  _| |_  \ \\
@@ -26,7 +26,7 @@ eval_code = input("eval_code> ")
 
 #for c in eval_code:
 #    if c not in allow_list:
-if (len(set(eval_code)) > 9) or ("help()" in eval_code): #PyJailBreak
+if len(set(eval_code)) > 9: #PyJailBreak
         #print(f"Hi, {c}!")
         print(f"Hi, Hacker!") #PyJailBreak
         sys.exit()
