@@ -31,7 +31,7 @@ Hi, Hacker !!!
 ```
 
 ## examples_03
-### IMCTF 2021 printtext💘  
+### [IMCTF 2021 printtext💘](https://github.com/satoki/imctf_2021_satoki_writeups/tree/main/misc/printtext)  
 Port:`4443`  
 ```bash
 $ nc localhost 4443
@@ -41,7 +41,7 @@ I don't have the flag.
 ```
 
 ## examples_04
-### SECCON CTF 2021 hitchhike  
+### [SECCON CTF 2021 hitchhike](https://ptr-yudai.hatenablog.com/entry/2021/12/19/232158#Misc-227pts-hitchhike)  
 Port:`4444`  
 ```
 $ nc localhost 4444
