@@ -1,0 +1,42 @@
+/** @format */
+
+/* ロゴ画像 */
+.logo {
+  position: relative;
+}
+.logo::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: inset 0 0 5px 5px #353a40;
+}
+.logo > img {
+  width: 100%;
+}
+.logo_hirizontal {
+  height: 1.5em;
+  transform: translateY(0.4em);
+}
+
+/* PyJailBreakの説明セクション */
+.description_section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.logo {
+  width: 30%;
+  margin: 5px;
+}
+.description {
+  width: 70%;
+  margin: 5px;
+  padding: 0.5em;
+  color: #eee;
+  text-align: center;
+}

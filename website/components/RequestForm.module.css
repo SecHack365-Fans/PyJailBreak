@@ -1,0 +1,19 @@
+/** @format */
+
+.body {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.scroll {
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.errMsg {
+  margin: auto 0;
+}
