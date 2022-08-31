@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+import string
 
-denylist = ["exec", "eval", "import"]
+denylist = string.ascii_letters
 
 def calc(text:str) -> str:
     for hack in denylist:
@@ -9,6 +10,6 @@ def calc(text:str) -> str:
     return str(eval(text))
 
 if __name__ == "__main__":
-    print(f"{'-'*10}Calculator{'-'*10}")
+    print(f"{'-'*10}Secure Calculator{'-'*10}")
     while True:
-        print(calc(input("<+> ")))
+        print(calc(input("<SecCalc> ")))
