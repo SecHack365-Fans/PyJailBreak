@@ -7,6 +7,7 @@ import {
   Cancel,
   HelpOutline,
   Loop,
+  PriorityHigh
 } from "@mui/icons-material";
 import { GridComparatorFn } from "@mui/x-data-grid";
 import { SeverityT } from "../models/PayloadsT";
@@ -60,6 +61,17 @@ const statusChip = (severity: SeverityT): ChipsT => {
         />
       ),
     },
+    serverError: {
+      priority: 4,
+      chip: (
+        <Chip
+          variant="outlined"
+          color="error"
+          label={"Server Error"}
+          icon={<PriorityHigh />}
+        />
+      ),
+    },
   };
 };
 
@@ -67,7 +79,7 @@ export const makeStatusChip = (severity: SeverityT): ChipT => {
   const chip = statusChip(severity);
   if (typeof severity === "undefined" || !(severity in chip)) {
     return {
-      priority: 4,
+      priority: 5,
       chip: (
         <Chip
           variant="outlined"

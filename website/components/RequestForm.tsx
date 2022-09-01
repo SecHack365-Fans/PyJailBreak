@@ -66,7 +66,7 @@ const RequestForm = () => {
         required
         label="Endpoint for Target Server"
         variant="outlined"
-        placeholder="https://this.is.vulnable.server:8000"
+        placeholder="this.is.vulnable.server:8000"
         value={attackUrl}
         onChange={(e) => {
           dispatch(setAttackUrl(e.target.value));
@@ -106,12 +106,12 @@ const columns: GridColDef[] = [
     ),
   },
   {
-    field: "expected",
+    field: "unexpected",
     headerName: "Expected Output",
     flex: 1,
     editable: true,
     renderCell: (params: GridValueGetterParams) => (
-      <p className={styles.scroll}>{params.row.expected}</p>
+      <p className={styles.scroll}>{params.row.unexpected}</p>
     ),
   },
   {
@@ -159,7 +159,7 @@ const DataGridFooters = (payloads: PayloadsT) => {
               payloads.map((payload) => {
                 return {
                   payload: payload.payload,
-                  expected: payload.expected,
+                  expected: payload.unexpected,
                   severity: payload.severity,
                 };
               }),

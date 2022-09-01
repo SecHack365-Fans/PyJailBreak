@@ -4,11 +4,10 @@ import { z } from "zod";
 import { GridRowId } from "@mui/x-data-grid";
 
 const SeverityS = z
-  .enum(["safe", "warning", "critical", "executing"])
-  .optional();
+  .enum(["safe", "warning", "critical", "executing", "serverError"]);
 const PayloadS = z.object({
-  payload: z.string(),
-  expected: z.string(),
+  payload: z.string().array(),
+  unexpected: z.string().array(),
   severity: SeverityS,
 });
 export const PayloadsS = z.array(PayloadS.merge(z.object({ id: z.number() })));

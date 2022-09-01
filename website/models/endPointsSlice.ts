@@ -14,8 +14,8 @@ type ActionT = {
 };
 
 const initialState: Url = {
-  APIUrl: "this is sample", // バックエンドのエンドポイント
-  attackUrl: "this is sample", // やられサーバのエンドポイント
+  APIUrl: "http://192.168.11.9:8080", // バックエンドのエンドポイント
+  attackUrl: "localhost:4444", // やられサーバのエンドポイント
 };
 
 export const endPointsSlice = createSlice({

@@ -12,26 +12,15 @@ import {
 } from "../models/payloadsSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { PayloadsT, SeverityT } from "../models/PayloadsT";
-import { GridSelectionModel } from "@mui/x-data-grid/models";
+import { GridSelectionModel, GridRowId } from "@mui/x-data-grid/models";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 const ExecuteAttack = () => {
   const apiUrl = useSelector(getAPIUrlState);
   const attackUrl = useSelector(getAttackUrlState);
   const payloads = useSelector(getPayloads);
   const selections = useSelector(getSelections); // idがnumber型なのでこれはnumber[]
-  const dispatch = useDispatch();
-  const changePayloadStatePrepareCall = async () => {
-    await dispatch(
-      setPayloads(changePayloadStatePrepare(payloads, selections))
-    );
-  };
-  const changePayloadStateExecCall = async (id: number) => {
-    await dispatch(
-      setPayloads(
-        changePayloadStateExec(payloads, { id: id, severity: "executing" })
-      )
-    );
-  };
+  const dispatch: Dispatch<AnyAction> = useDispatch();
   return (
     <div style={{ margin: "1em" }}>
       <Toaster />
@@ -39,45 +28,9 @@ const ExecuteAttack = () => {
         variant="outlined"
         size="large"
         endIcon={<SendIcon />}
-        onClick={async () => {
+        onClick={() => {
           if (!validation(apiUrl, attackUrl, payloads, selections)) {
-            // executeAttack(
-            //   apiUrl,
-            //   attackUrl,
-            //   payloads,
-            //   selections,
-            //   changePayloadStatePrepareCall,
-            //   changePayloadStateExecCall
-            // );
-            let nextPayloads = changePayloadStatePrepare(payloads, selections);
-            await dispatch(setPayloads(nextPayloads));
-            setInterval(() => {
-              const randRange = (min, max) =>
-                Math.floor(Math.random() * (max - min + 1) + min);
-              const id = randRange(0, nextPayloads.length - 1);
-              const severity: SeverityT = (() => {
-                switch (nextPayloads[id].severity) {
-                  case "executing":
-                    return randRange(0, 1) ? "safe" : "critical";
-                  case undefined:
-                    return "executing";
-                  default:
-                    return nextPayloads[id].severity;
-                }
-              })();
-              nextPayloads = changePayloadStateExec(nextPayloads, {
-                id: id,
-                severity: severity,
-              });
-              dispatch(
-                setPayloads(
-                  changePayloadStateExec(nextPayloads, {
-                    id: id,
-                    severity: severity,
-                  })
-                )
-              );
-            }, 2000);
+            executeAttack(apiUrl, attackUrl, payloads, selections, dispatch);
           }
         }}
         sx={{
@@ -104,12 +57,38 @@ const executeAttack = async (
   attackUrl: string,
   payloads: PayloadsT,
   selections: GridSelectionModel,
-  changePayloadStatePrepareCall: () => Promise<void>,
-  changePayloadStateExecCall: (number) => Promise<void>
+  dispatch: Dispatch<AnyAction>
 ) => {
-  toast.success("Attack started");
-  await changePayloadStatePrepareCall();
-  changePayloadStateExecCall(1);
+  toast.success("Scan Started!");
+  for (const selectedId of selections) {
+    console.log("selectedId: ", selectedId)
+    const payload = payloads.find((payload) => payload.id === selectedId);
+    if (payload === undefined) {
+      continue;
+    }
+    await fetch(`${apiUrl}/scan`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        payload: payload.payload,
+        unexpected: payload.unexpected,
+        severity: payload.severity,
+        endpoint: {
+          domain: attackUrl.split(":")[0], // FIXME
+          port: attackUrl.split(":")[1],
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => { // TODO: validation with zod
+        console.log("API response: ", json)
+        const changePoint = { id: selectedId, severity: json.severity as SeverityT };
+        payloads = changePayloadStateExec(payloads, changePoint);
+        dispatch(setPayloads(payloads));
+      });
+  }
 };
 
 const validation = (
@@ -137,28 +116,9 @@ const validation = (
   return isError;
 };
 
-const changePayloadStatePrepare = (
-  payloads: PayloadsT,
-  selections: GridSelectionModel
-) => {
-  const newPayloads: PayloadsT = payloads.map((payload) => {
-    if (payload.id in selections) {
-      return {
-        id: payload.id,
-        payload: payload.payload,
-        expected: payload.expected,
-        severity: undefined,
-      };
-    } else {
-      return payload;
-    }
-  });
-  return newPayloads;
-};
-
 const changePayloadStateExec = (
   payloads: PayloadsT,
-  changePoint: { id: number; severity: SeverityT }
+  changePoint: { id: GridRowId; severity: SeverityT }
 ) => {
   const { id, severity } = changePoint;
   const newPayloads: PayloadsT = payloads.map((payload) => {
