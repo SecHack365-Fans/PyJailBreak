@@ -5,25 +5,27 @@ app = Flask(__name__)
 
 @app.route("/scan", methods=["POST"])
 def scan():
+    #if True:
     try:
         status = "safe"
         # POST Data 取得
         data = request.get_json()
         # 検証先に接続
-        io = remote(data["endpoint"][0], data["endpoint"][1])
+        io = remote(data["endpoint"]["domain"], data["endpoint"]["port"])
         # 初期応答取得
-        response = io.recvrepeat(0.1).decode()
+        response = io.recvrepeat(0.2).decode()
         # ペイロード送信&応答取得
-        for p in data["payloads"]:
+        for p in data["payload"]:
             io.sendline(p.encode())
-            response += io.recvrepeat(0.1).decode()
+            response += io.recvrepeat(0.2).decode()
         # 期待していない文字列を検証
-        for u in data["unexpecteds"]:
+        for u in data["unexpected"]:
             if u in response:
-                status = data["risk"]
+                status = data["severity"]
         # 検証先の接続を閉じる
         io.close()
     except:
+    #else:
         return jsonify({"success": False, "severity": "unknown"})
     return jsonify({"success": True, "severity": status})
 
