@@ -6,7 +6,7 @@
   text-align: center;
 }
 .scroll {
-  overflow: scroll;
+  overflow-x: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
