@@ -1,7 +1,9 @@
 from pwn import *
+from flask_cors import CORS
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+CORS(app, origins=["https://example.com", "http://localhost:3000"])
 
 @app.route("/scan", methods=["POST"])
 def scan():
