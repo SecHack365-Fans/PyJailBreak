@@ -34,7 +34,7 @@ def scan():
         # 検証先の接続を閉じる
         io.close()
     except:
-        return jsonify({"success": False, "severity": "unknown"})
+        return jsonify({"success": False, "severity": "serverError"})
     return jsonify({"success": True, "severity": status})
 
 
