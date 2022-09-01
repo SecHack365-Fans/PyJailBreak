@@ -131,7 +131,7 @@ const changePayloadStateExec = (
   const { id, severity } = changePoint;
   const newPayloads: PayloadsT = payloads.map((payload) => {
     if (payload.id === id) {
-      return { ...payload, severity };
+      return { ...payload, result: severity };
     } else {
       return payload;
     }

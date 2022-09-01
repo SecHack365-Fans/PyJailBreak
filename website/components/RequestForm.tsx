@@ -107,7 +107,7 @@ const columns: GridColDef[] = [
   },
   {
     field: "unexpected",
-    headerName: "Expected Output",
+    headerName: "Unexpected Output",
     flex: 1,
     editable: true,
     renderCell: (params: GridValueGetterParams) => (
@@ -116,10 +116,21 @@ const columns: GridColDef[] = [
   },
   {
     field: "severity",
-    headerName: "Scan Result",
+    headerName: "Expected Severity",
+    headerAlign: 'center',
     flex: 1,
+    align: "center",
     renderCell: (params: GridValueGetterParams) =>
       makeStatusChip(params.row.severity).chip,
+    sortComparator: resultsComparator,
+  },
+  {
+    field: "result",
+    headerName: "Scan Result",
+    headerAlign: 'center',
+    flex: 1,
+    align: "center",
+    renderCell: (params: GridValueGetterParams) => makeStatusChip(params.row.result).chip,
     sortComparator: resultsComparator,
   },
 ];

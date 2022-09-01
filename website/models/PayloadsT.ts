@@ -9,6 +9,7 @@ const PayloadS = z.object({
   payload: z.string().array(),
   unexpected: z.string().array(),
   severity: SeverityS,
+  result: SeverityS.optional()
 } as const);
 export const PayloadsS = z.array(PayloadS.merge(z.object({ id: z.number() })));
 
