@@ -3,11 +3,18 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-CORS(app, origins=["https://example.com", "http://localhost:3000"])
+CORS(
+    app,
+    origins=[
+        "https://fans.sechack365.com/",
+        "https://sechack365-fans.github.io/",
+        "http://localhost:3000",
+    ],
+)
+
 
 @app.route("/scan", methods=["POST"])
 def scan():
-    #if True:
     try:
         status = "safe"
         # POST Data 取得
@@ -27,9 +34,9 @@ def scan():
         # 検証先の接続を閉じる
         io.close()
     except:
-    #else:
         return jsonify({"success": False, "severity": "unknown"})
     return jsonify({"success": True, "severity": status})
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
