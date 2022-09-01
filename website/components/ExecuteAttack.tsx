@@ -52,6 +52,11 @@ const ExecuteAttack = () => {
   );
 };
 
+type ChangePointT = {
+  id: GridRowId;
+  severity: SeverityT;
+}
+
 const executeAttack = async (
   apiUrl: string,
   attackUrl: string,
@@ -63,9 +68,12 @@ const executeAttack = async (
   for (const selectedId of selections) {
     console.log("selectedId: ", selectedId)
     const payload = payloads.find((payload) => payload.id === selectedId);
-    if (payload === undefined) {
+    if (typeof payload === "undefined") {
       continue;
     }
+    const changePoint:ChangePointT = { id: selectedId, severity: "executing" };
+    payloads = changePayloadStateExec(payloads, changePoint);
+    dispatch(setPayloads(payloads));
     await fetch(`${apiUrl}/scan`, {
       method: "POST",
       headers: {
@@ -84,7 +92,7 @@ const executeAttack = async (
       .then((res) => res.json())
       .then((json) => { // TODO: validation with zod
         console.log("API response: ", json)
-        const changePoint = { id: selectedId, severity: json.severity as SeverityT };
+        const changePoint:ChangePointT = { id: selectedId, severity: json.severity };
         payloads = changePayloadStateExec(payloads, changePoint);
         dispatch(setPayloads(payloads));
       });
