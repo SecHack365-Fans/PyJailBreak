@@ -25,7 +25,11 @@ import {
   setOpen,
   setRowId,
 } from "../models/payloadsDialogSlice";
-import { getPayloads, setSelections } from "../models/payloadsSlice";
+import {
+  getPayloads,
+  setSelections,
+  setPayloads,
+} from "../models/payloadsSlice";
 import { PayloadsT } from "../models/PayloadsT";
 import { DataGridFooters } from "./DataGridFooters";
 
@@ -59,8 +63,20 @@ const RequestForm = () => {
     dispatch(setOpen(true));
     dispatch(setRowId(gridRowId));
   };
-  const handleDialogClose = () => {
+  const handleDialogClose = (gridRowId: GridRowId) => {
     dispatch(setOpen(false));
+    console.log(payloads[gridRowId as number]);
+    const newPayloads = [
+      ...payloads.slice(0, gridRowId as number),
+      {
+        ...payloads[gridRowId as number],
+        payload: payloads[gridRowId as number].payload.filter(
+          (payload) => payload !== ""
+        ),
+      },
+      ...payloads.slice((gridRowId as number) + 1),
+    ];
+    dispatch(setPayloads(newPayloads));
   };
   return (
     <div className={styles.body}>

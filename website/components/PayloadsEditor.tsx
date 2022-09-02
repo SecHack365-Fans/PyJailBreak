@@ -21,7 +21,7 @@ import { getPayloads, setPayloads } from "../models/payloadsSlice";
 type ParamsT = {
   open: boolean;
   rowId: GridRowId;
-  handleClose: () => void;
+  handleClose: (rowId: GridRowId) => void;
 };
 
 // TODO: refactor onClick, onChange
@@ -30,13 +30,19 @@ export const PayloadsEditor = (params: ParamsT) => {
   const dispatch = useDispatch();
   const payloads: PayloadsT = useSelector(getPayloads);
   return (
-    <Dialog open={params.open} onClose={params.handleClose}>
+    <Dialog
+      open={params.open}
+      onClose={() => {
+        setNewPayload("");
+        params.handleClose(params.rowId);
+      }}
+    >
       <DialogTitle>Change Payload #{params.rowId}</DialogTitle>
       <DialogContent>
         <List>
           {/* TODO: Scroll */}
           {payloads[params.rowId].payload.map((payload, idx) => (
-            <ListItem>
+            <ListItem key={idx}>
               <TextField
                 label={`Payload ${idx}`}
                 value={payload}
@@ -109,6 +115,7 @@ export const PayloadsEditor = (params: ParamsT) => {
                     <IconButton
                       edge="end"
                       onClick={() => {
+                        if (newPayload == "") return;
                         let newPayloads = [
                           ...payloads.slice(0, params.rowId as number),
                           {
@@ -133,7 +140,14 @@ export const PayloadsEditor = (params: ParamsT) => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button onClick={params.handleClose}>Close</Button>
+        <Button
+          onClick={() => {
+            setNewPayload("");
+            params.handleClose(params.rowId);
+          }}
+        >
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );
