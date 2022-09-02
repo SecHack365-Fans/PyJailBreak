@@ -107,7 +107,6 @@ const RequestForm = () => {
       <PayloadsEditor
         open={dialogOpen}
         rowId={dialogRowId}
-        payload={payloads[dialogRowId].payload}
         handleClose={handleDialogClose}
       />
     </div>

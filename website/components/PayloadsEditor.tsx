@@ -21,7 +21,6 @@ import { getPayloads, setPayloads } from "../models/payloadsSlice";
 type ParamsT = {
   open: boolean;
   rowId: GridRowId;
-  payload: string[];
   handleClose: () => void;
 };
 
@@ -36,7 +35,7 @@ export const PayloadsEditor = (params: ParamsT) => {
       <DialogContent>
         <List>
           {/* TODO: Scroll */}
-          {params.payload.map((payload, idx) => (
+          {payloads[params.rowId].payload.map((payload, idx) => (
             <ListItem>
               <TextField
                 label={`Payload ${idx}`}
