@@ -101,7 +101,7 @@ const RequestForm = () => {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={payloads}
-          columns={columns(handleDialogOpen)}
+          columns={columns()}
           checkboxSelection
           disableSelectionOnClick
           onSelectionModelChange={(selections) =>
@@ -129,21 +129,12 @@ const RequestForm = () => {
   );
 };
 
-const columns = (
-  handleDialogOpen: (id: GridRowId, mode: "payload" | "unexpected") => void
-): GridColDef[] => {
+const columns = (): GridColDef[] => {
   const chipStyle = {
     margin: "0 2px",
     p: "0 5px",
     "& .MuiChip-label": {
       color: "#ccc",
-      overflowX: "scroll",
-      textOverflow: "clip",
-      scrollbarWidth: "none",
-      msOverflowStyle: "none",
-      "&::-webkit-scrollbar": {
-        display: "none",
-      },
     },
   };
   return [

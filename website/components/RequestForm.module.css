@@ -7,6 +7,7 @@
 }
 .scroll {
   overflow-x: scroll;
+  text-overflow: clip;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
