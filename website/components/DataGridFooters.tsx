@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import { onChangeInputFile } from "./onChangeInputFile";
+import { onChangeInputFile } from "./importFile";
 import { downloadFile } from "./downloadFile";
 import { Button, Box, Tooltip } from "@mui/material";
 import { FileUpload, FileDownload } from "@mui/icons-material";
