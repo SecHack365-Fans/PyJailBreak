@@ -116,13 +116,15 @@ const RequestForm = () => {
               padding: "2px",
             },
           }}
+          onCellClick={(params) => {
+            if (params.field === "payload" || params.field === "unexpected") {
+              handleDialogOpen(params.id, params.field);
+            }
+          }}
         />
       </div>
       <ExecuteAttack />
       <DialogEditor handleClose={handleDialogClose} />
-      <pre style={{ textAlign: "left" }}>
-        {JSON.stringify(payloads, null, "\t")}
-      </pre>
     </div>
   );
 };
@@ -150,12 +152,7 @@ const columns = (
       headerName: "Payload",
       flex: 1,
       renderCell: (params: GridValueGetterParams) => (
-        // TODO: クリックできる場所の範囲を変更する
-        <span
-          className={styles.scroll}
-          onClick={() => handleDialogOpen(params.id, "payload")}
-          style={{ padding: "2px" }}
-        >
+        <span className={styles.scroll} style={{ padding: "2px" }}>
           {params.row.payload.map((option: string, index: number) => (
             <Chip
               key={index}
@@ -171,14 +168,9 @@ const columns = (
       field: "unexpected",
       headerName: "Unexpected Output",
       flex: 1,
-      editable: true,
       renderCell: (params: GridValueGetterParams) => (
         // TODO: クリックできる場所の範囲を変更する
-        <span
-          className={styles.scroll}
-          onClick={() => handleDialogOpen(params.id, "unexpected")}
-          style={{ padding: "2px" }}
-        >
+        <span className={styles.scroll} style={{ padding: "2px" }}>
           {params.row.unexpected.map((option: string, index: number) => (
             <Chip
               key={index}

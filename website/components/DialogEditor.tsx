@@ -1,12 +1,7 @@
 /** @format */
 
 import React from "react";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -160,16 +155,6 @@ export const DialogEditor = (params: ParamsT) => {
           </ListItem>
         </List>
       </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={() => {
-            setNewText("");
-            params.handleClose(rowId);
-          }}
-        >
-          Close
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
