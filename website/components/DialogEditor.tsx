@@ -39,13 +39,14 @@ export const DialogEditor = (params: ParamsT) => {
         setNewText("");
         params.handleClose(rowId);
       }}
+      fullWidth
+      maxWidth={"sm"}
     >
       <DialogTitle>
         Change {title(mode)} #{rowId}
       </DialogTitle>
       <DialogContent>
         <List>
-          {/* TODO: Scroll */}
           {payloads[rowId][mode].map((payload, idx) => (
             <ListItem key={idx}>
               <TextField
