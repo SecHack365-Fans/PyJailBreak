@@ -108,7 +108,7 @@ const RequestForm = () => {
             dispatch(setSelections(selections))
           }
           components={{
-            Footer: () => DataGridFooters(payloads),
+            Footer: () => <DataGridFooters />,
           }}
           sx={{
             color: "#eee",

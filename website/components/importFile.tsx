@@ -5,7 +5,7 @@ import { PayloadT, PayloadsT, PayloadsS } from "../models/PayloadsT";
 import { Base64 } from "js-base64";
 import toast from "react-hot-toast";
 
-const userBase64Payloads = (result) => {
+const userBase64Payloads = (result: string | ArrayBuffer) => {
   if (typeof result === "string") {
     return result;
   }
@@ -36,7 +36,6 @@ export const onChangeInputFile = (
     const userPayloads = Base64.decode(
       userBase64Payloads(e.target.result).split(",")[1]
     );
-    // console.log("Read: ", userPayloads);
     let parsedJson: PayloadsT = [{}];
     try {
       parsedJson = JSON.parse(userPayloads);
@@ -53,8 +52,8 @@ export const onChangeInputFile = (
       const persedPayloads = PayloadsS.parse(idxedParsedJson);
       setPayloads(persedPayloads);
     } catch (error) {
-      console.log("ERR",error)
-      // toast.error("ペイロードファイルの形式が不正です");
+      console.error(error)
+      toast.error("ペイロードファイルの形式が不正です");
     }
   };
   reader.readAsDataURL(file);
