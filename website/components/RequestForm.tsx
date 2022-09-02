@@ -187,6 +187,7 @@ const columns = (
       headerName: "Expected Severity",
       headerAlign: "center",
       flex: 1,
+      maxWidth: 170,
       align: "center",
       renderCell: (params: GridValueGetterParams) =>
         makeStatusChip(params.row.severity).chip,
@@ -197,6 +198,7 @@ const columns = (
       headerName: "Scan Result",
       headerAlign: "center",
       flex: 1,
+      maxWidth: 170,
       align: "center",
       renderCell: (params: GridValueGetterParams) =>
         makeStatusChip(params.row.result).chip,
