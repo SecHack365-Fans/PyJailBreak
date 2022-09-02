@@ -2,7 +2,7 @@
 
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
-import { PayloadsEditor } from "./PayloadsEditor";
+import { PayloadsEditor } from "./DialogEditor";
 import { TextField, Chip } from "@mui/material";
 import {
   DataGrid,
@@ -19,12 +19,7 @@ import {
   setAPIUrl,
   setAttackUrl,
 } from "../models/endPointsSlice";
-import {
-  getOpenState,
-  getRowIdState,
-  setOpen,
-  setRowId,
-} from "../models/payloadsDialogSlice";
+import { setOpen, setRowId, setMode } from "../models/payloadsDialogSlice";
 import {
   getPayloads,
   setSelections,
@@ -38,8 +33,6 @@ const RequestForm = () => {
   const apiUrl = useSelector(getAPIUrlState);
   const attackUrl = useSelector(getAttackUrlState);
   const payloads: PayloadsT = useSelector(getPayloads);
-  const dialogOpen = useSelector(getOpenState);
-  const dialogRowId = useSelector(getRowIdState);
   const textFieldStyle = {
     width: "40%",
     maxWidth: "600px",
@@ -59,13 +52,16 @@ const RequestForm = () => {
       },
     },
   };
-  const handleDialogOpen = (gridRowId: GridRowId) => {
+  const handleDialogOpen = (
+    gridRowId: GridRowId,
+    mode: "payload" | "unexpected"
+  ) => {
     dispatch(setOpen(true));
     dispatch(setRowId(gridRowId));
+    dispatch(setMode(mode));
   };
   const handleDialogClose = (gridRowId: GridRowId) => {
     dispatch(setOpen(false));
-    console.log(payloads[gridRowId as number]);
     const newPayloads = [
       ...payloads.slice(0, gridRowId as number),
       {
@@ -120,16 +116,14 @@ const RequestForm = () => {
         />
       </div>
       <ExecuteAttack />
-      <PayloadsEditor
-        open={dialogOpen}
-        rowId={dialogRowId}
-        handleClose={handleDialogClose}
-      />
+      <PayloadsEditor handleClose={handleDialogClose} />
     </div>
   );
 };
 
-const columns = (handleDialogOpen: (id: GridRowId) => void): GridColDef[] => {
+const columns = (
+  handleDialogOpen: (id: GridRowId, mode: "payload" | "unexpected") => void
+): GridColDef[] => {
   return [
     {
       field: "payload",
@@ -139,7 +133,7 @@ const columns = (handleDialogOpen: (id: GridRowId) => void): GridColDef[] => {
         // TODO: クリックできる場所の範囲を変更する
         <span
           className={styles.scroll}
-          onClick={() => handleDialogOpen(params.id)}
+          onClick={() => handleDialogOpen(params.id, "payload")}
         >
           {params.row.payload.map((option: string, index: number) => (
             <Chip

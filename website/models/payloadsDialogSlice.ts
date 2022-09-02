@@ -7,6 +7,7 @@ import { GridRowId } from "@mui/x-data-grid";
 type Url = {
   open: boolean;
   gridRowId: GridRowId;
+  mode: "payload" | "unexpected";
 };
 
 type RowIdActionT = {
@@ -19,9 +20,15 @@ type OpenActionT = {
   payload: boolean;
 };
 
+type ModeActionT = {
+  type: string;
+  payload: "payload" | "unexpected";
+};
+
 const initialState: Url = {
   open: false,
   gridRowId: 0,
+  mode: "payload",
 };
 
 export const endPointsSlice = createSlice({
@@ -34,14 +41,19 @@ export const endPointsSlice = createSlice({
     setOpen: (state, action: OpenActionT) => {
       state.open = action.payload;
     },
+    setMode: (state, action: ModeActionT) => {
+      state.mode = action.payload;
+    },
   },
 });
 
-export const { setRowId, setOpen } = endPointsSlice.actions;
+export const { setRowId, setOpen, setMode } = endPointsSlice.actions;
 
 export const getRowIdState = (state: RootState) =>
   state.payloadsDialogReducer.gridRowId;
 export const getOpenState = (state: RootState) =>
   state.payloadsDialogReducer.open;
+export const getModeState = (state: RootState) =>
+  state.payloadsDialogReducer.mode;
 
 export default endPointsSlice.reducer;

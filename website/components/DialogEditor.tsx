@@ -17,10 +17,9 @@ import { Delete, Add } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { PayloadsT } from "../models/PayloadsT";
 import { getPayloads, setPayloads } from "../models/payloadsSlice";
+import { getOpenState, getRowIdState } from "../models/payloadsDialogSlice";
 
 type ParamsT = {
-  open: boolean;
-  rowId: GridRowId;
   handleClose: (rowId: GridRowId) => void;
 };
 
@@ -29,19 +28,21 @@ export const PayloadsEditor = (params: ParamsT) => {
   const [newPayload, setNewPayload] = React.useState("");
   const dispatch = useDispatch();
   const payloads: PayloadsT = useSelector(getPayloads);
+  const open = useSelector(getOpenState);
+  const rowId = useSelector(getRowIdState);
   return (
     <Dialog
-      open={params.open}
+      open={open}
       onClose={() => {
         setNewPayload("");
-        params.handleClose(params.rowId);
+        params.handleClose(rowId);
       }}
     >
-      <DialogTitle>Change Payload #{params.rowId}</DialogTitle>
+      <DialogTitle>Change Payload #{rowId}</DialogTitle>
       <DialogContent>
         <List>
           {/* TODO: Scroll */}
-          {payloads[params.rowId].payload.map((payload, idx) => (
+          {payloads[rowId].payload.map((payload, idx) => (
             <ListItem key={idx}>
               <TextField
                 label={`Payload ${idx}`}
@@ -51,21 +52,16 @@ export const PayloadsEditor = (params: ParamsT) => {
                 autoComplete="off"
                 onChange={(e) => {
                   const newPayloads = [
-                    ...payloads.slice(0, params.rowId as number),
+                    ...payloads.slice(0, rowId as number),
                     {
-                      ...payloads[params.rowId as number],
+                      ...payloads[rowId],
                       payload: [
-                        ...payloads[params.rowId as number].payload.slice(
-                          0,
-                          idx
-                        ),
+                        ...payloads[rowId].payload.slice(0, idx),
                         e.target.value,
-                        ...payloads[params.rowId as number].payload.slice(
-                          idx + 1
-                        ),
+                        ...payloads[rowId].payload.slice(idx + 1),
                       ],
                     },
-                    ...payloads.slice((params.rowId as number) + 1),
+                    ...payloads.slice((rowId as number) + 1),
                   ];
                   dispatch(setPayloads(newPayloads));
                 }}
@@ -76,19 +72,15 @@ export const PayloadsEditor = (params: ParamsT) => {
                         edge="end"
                         onClick={() => {
                           const newPayloads = [
-                            ...payloads.slice(0, params.rowId as number),
+                            ...payloads.slice(0, rowId as number),
                             {
-                              ...payloads[params.rowId as number],
+                              ...payloads[rowId],
                               payload: [
-                                ...payloads[
-                                  params.rowId as number
-                                ].payload.slice(0, idx),
-                                ...payloads[
-                                  params.rowId as number
-                                ].payload.slice(idx + 1),
+                                ...payloads[rowId].payload.slice(0, idx),
+                                ...payloads[rowId].payload.slice(idx + 1),
                               ],
                             },
-                            ...payloads.slice((params.rowId as number) + 1),
+                            ...payloads.slice((rowId as number) + 1),
                           ];
                           dispatch(setPayloads(newPayloads));
                         }}
@@ -117,14 +109,14 @@ export const PayloadsEditor = (params: ParamsT) => {
                       onClick={() => {
                         if (newPayload == "") return;
                         let newPayloads = [
-                          ...payloads.slice(0, params.rowId as number),
+                          ...payloads.slice(0, rowId as number),
                           {
-                            ...payloads[params.rowId as number],
-                            payload: payloads[
-                              params.rowId as number
-                            ].payload.concat([newPayload]),
+                            ...payloads[rowId],
+                            payload: payloads[rowId].payload.concat([
+                              newPayload,
+                            ]),
                           },
-                          ...payloads.slice((params.rowId as number) + 1),
+                          ...payloads.slice((rowId as number) + 1),
                         ];
                         dispatch(setPayloads(newPayloads));
                         setNewPayload("");
@@ -143,7 +135,7 @@ export const PayloadsEditor = (params: ParamsT) => {
         <Button
           onClick={() => {
             setNewPayload("");
-            params.handleClose(params.rowId);
+            params.handleClose(rowId);
           }}
         >
           Close
