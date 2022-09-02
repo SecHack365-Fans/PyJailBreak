@@ -3,6 +3,7 @@
 import React from "react";
 import { PayloadT, PayloadsT, PayloadsS } from "../models/PayloadsT";
 import { Base64 } from "js-base64";
+import toast from "react-hot-toast";
 
 const userBase64Payloads = (result) => {
   if (typeof result === "string") {
@@ -16,11 +17,9 @@ const userBase64Payloads = (result) => {
 export const onChangeInputFile = (
   e: React.ChangeEvent<HTMLInputElement>,
   setPayloads: (payloads: PayloadsT) => void,
-  setFileReadError: (err: string | null) => void
 ) => {
-  setFileReadError(null);
   if (!e.target.files || !e.target.files[0]) {
-    setFileReadError("Unexpected Error!");
+    toast.error("Unexpected Error!");
     return;
   }
   const file = e.target.files[0];
@@ -31,18 +30,18 @@ export const onChangeInputFile = (
         "data:application/json;base64,"
       )
     ) {
-      setFileReadError("json形式のファイルではありません");
+      toast.error("json形式のファイルではありません");
       return;
     }
     const userPayloads = Base64.decode(
       userBase64Payloads(e.target.result).split(",")[1]
     );
-    console.log("Read: ", userPayloads);
+    // console.log("Read: ", userPayloads);
     let parsedJson: PayloadsT = [{}];
     try {
       parsedJson = JSON.parse(userPayloads);
     } catch {
-      setFileReadError("jsonのパースに失敗しました");
+      toast.error("jsonのパースに失敗しました");
       return;
     }
     try {
@@ -50,10 +49,12 @@ export const onChangeInputFile = (
         id: id,
         ...payload,
       }));
+      console.log(idxedParsedJson)
       const persedPayloads = PayloadsS.parse(idxedParsedJson);
       setPayloads(persedPayloads);
-    } catch {
-      setFileReadError("ペイロードファイルの形式が不正です");
+    } catch (error) {
+      console.log("ERR",error)
+      // toast.error("ペイロードファイルの形式が不正です");
     }
   };
   reader.readAsDataURL(file);
