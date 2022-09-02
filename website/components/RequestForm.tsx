@@ -2,7 +2,7 @@
 
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
-import { PayloadsEditor } from "./DialogEditor";
+import { DialogEditor } from "./DialogEditor";
 import { TextField, Chip } from "@mui/material";
 import {
   DataGrid,
@@ -112,11 +112,17 @@ const RequestForm = () => {
           }}
           sx={{
             color: "#eee",
+            "& .MuiDataGrid-cell": {
+              padding: "2px",
+            },
           }}
         />
       </div>
       <ExecuteAttack />
-      <PayloadsEditor handleClose={handleDialogClose} />
+      <DialogEditor handleClose={handleDialogClose} />
+      <pre style={{ textAlign: "left" }}>
+        {JSON.stringify(payloads, null, "\t")}
+      </pre>
     </div>
   );
 };
@@ -124,6 +130,20 @@ const RequestForm = () => {
 const columns = (
   handleDialogOpen: (id: GridRowId, mode: "payload" | "unexpected") => void
 ): GridColDef[] => {
+  const chipStyle = {
+    margin: "0 2px",
+    p: "0 5px",
+    "& .MuiChip-label": {
+      color: "#ccc",
+      overflowX: "scroll",
+      textOverflow: "clip",
+      scrollbarWidth: "none",
+      msOverflowStyle: "none",
+      "&::-webkit-scrollbar": {
+        display: "none",
+      },
+    },
+  };
   return [
     {
       field: "payload",
@@ -134,26 +154,14 @@ const columns = (
         <span
           className={styles.scroll}
           onClick={() => handleDialogOpen(params.id, "payload")}
+          style={{ padding: "2px" }}
         >
           {params.row.payload.map((option: string, index: number) => (
             <Chip
               key={index}
               variant="outlined"
               label={option}
-              sx={{
-                margin: "0 2px",
-                p: "0 5px",
-                "& .MuiChip-label": {
-                  color: "#ccc",
-                  overflowX: "scroll",
-                  textOverflow: "clip",
-                  scrollbarWidth: "none",
-                  msOverflowStyle: "none",
-                  "&::-webkit-scrollbar": {
-                    display: "none",
-                  },
-                },
-              }}
+              sx={chipStyle}
             />
           ))}
         </span>
@@ -165,7 +173,21 @@ const columns = (
       flex: 1,
       editable: true,
       renderCell: (params: GridValueGetterParams) => (
-        <p className={styles.scroll}>{params.row.unexpected}</p>
+        // TODO: クリックできる場所の範囲を変更する
+        <span
+          className={styles.scroll}
+          onClick={() => handleDialogOpen(params.id, "unexpected")}
+          style={{ padding: "2px" }}
+        >
+          {params.row.unexpected.map((option: string, index: number) => (
+            <Chip
+              key={index}
+              variant="outlined"
+              label={option}
+              sx={chipStyle}
+            />
+          ))}
+        </span>
       ),
     },
     {

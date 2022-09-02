@@ -17,35 +17,44 @@ import { Delete, Add } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { PayloadsT } from "../models/PayloadsT";
 import { getPayloads, setPayloads } from "../models/payloadsSlice";
-import { getOpenState, getRowIdState } from "../models/payloadsDialogSlice";
+import {
+  getModeState,
+  getOpenState,
+  getRowIdState,
+} from "../models/payloadsDialogSlice";
 
 type ParamsT = {
   handleClose: (rowId: GridRowId) => void;
 };
 
 // TODO: refactor onClick, onChange
-export const PayloadsEditor = (params: ParamsT) => {
-  const [newPayload, setNewPayload] = React.useState("");
+export const DialogEditor = (params: ParamsT) => {
+  const [newText, setNewText] = React.useState("");
   const dispatch = useDispatch();
   const payloads: PayloadsT = useSelector(getPayloads);
   const open = useSelector(getOpenState);
   const rowId = useSelector(getRowIdState);
+  const mode = useSelector(getModeState);
+  const title = (mode) =>
+    mode === "payload" ? "Payload" : "Unexpected Output";
   return (
     <Dialog
       open={open}
       onClose={() => {
-        setNewPayload("");
+        setNewText("");
         params.handleClose(rowId);
       }}
     >
-      <DialogTitle>Change Payload #{rowId}</DialogTitle>
+      <DialogTitle>
+        Change {title(mode)} #{rowId}
+      </DialogTitle>
       <DialogContent>
         <List>
           {/* TODO: Scroll */}
-          {payloads[rowId].payload.map((payload, idx) => (
+          {payloads[rowId][mode].map((payload, idx) => (
             <ListItem key={idx}>
               <TextField
-                label={`Payload ${idx}`}
+                label={`${title(mode)} ${idx}`}
                 value={payload}
                 fullWidth
                 variant="standard"
@@ -56,9 +65,9 @@ export const PayloadsEditor = (params: ParamsT) => {
                     {
                       ...payloads[rowId],
                       payload: [
-                        ...payloads[rowId].payload.slice(0, idx),
+                        ...payloads[rowId][mode].slice(0, idx),
                         e.target.value,
-                        ...payloads[rowId].payload.slice(idx + 1),
+                        ...payloads[rowId][mode].slice(idx + 1),
                       ],
                     },
                     ...payloads.slice((rowId as number) + 1),
@@ -75,10 +84,25 @@ export const PayloadsEditor = (params: ParamsT) => {
                             ...payloads.slice(0, rowId as number),
                             {
                               ...payloads[rowId],
-                              payload: [
-                                ...payloads[rowId].payload.slice(0, idx),
-                                ...payloads[rowId].payload.slice(idx + 1),
-                              ],
+                              payload:
+                                mode === "payload"
+                                  ? [
+                                      ...payloads[rowId].payload.slice(0, idx),
+                                      ...payloads[rowId].payload.slice(idx + 1),
+                                    ]
+                                  : payloads[rowId].payload,
+                              unexpected:
+                                mode === "unexpected"
+                                  ? [
+                                      ...payloads[rowId].unexpected.slice(
+                                        0,
+                                        idx
+                                      ),
+                                      ...payloads[rowId].unexpected.slice(
+                                        idx + 1
+                                      ),
+                                    ]
+                                  : payloads[rowId].unexpected,
                             },
                             ...payloads.slice((rowId as number) + 1),
                           ];
@@ -98,28 +122,33 @@ export const PayloadsEditor = (params: ParamsT) => {
               fullWidth
               variant="standard"
               autoComplete="off"
-              label="Add new payload"
-              value={newPayload}
-              onChange={(e) => setNewPayload(e.target.value)}
+              label={`Add new ${title(mode)}`}
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       edge="end"
                       onClick={() => {
-                        if (newPayload == "") return;
+                        if (newText == "") return;
                         let newPayloads = [
                           ...payloads.slice(0, rowId as number),
                           {
                             ...payloads[rowId],
-                            payload: payloads[rowId].payload.concat([
-                              newPayload,
-                            ]),
+                            payload:
+                              mode === "payload"
+                                ? payloads[rowId].payload.concat([newText])
+                                : payloads[rowId].payload,
+                            unexpected:
+                              mode === "unexpected"
+                                ? payloads[rowId].unexpected.concat([newText])
+                                : payloads[rowId].unexpected,
                           },
                           ...payloads.slice((rowId as number) + 1),
                         ];
                         dispatch(setPayloads(newPayloads));
-                        setNewPayload("");
+                        setNewText("");
                       }}
                     >
                       <Add />
@@ -134,7 +163,7 @@ export const PayloadsEditor = (params: ParamsT) => {
       <DialogActions>
         <Button
           onClick={() => {
-            setNewPayload("");
+            setNewText("");
             params.handleClose(rowId);
           }}
         >
