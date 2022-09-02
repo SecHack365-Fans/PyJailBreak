@@ -1,10 +1,9 @@
 /** @format */
 
 import React from "react";
-import { onChangeInputFile } from "./onChangeInputFile";
 import ExecuteAttack from "./ExecuteAttack";
 import { PayloadsEditor } from "./PayloadsEditor";
-import { TextField, Button, Box, Tooltip, Chip } from "@mui/material";
+import { TextField, Chip } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -12,10 +11,7 @@ import {
   GridRowId,
 } from "@mui/x-data-grid";
 import { makeStatusChip, resultsComparator } from "./statusChip";
-import { downloadFile } from "./downloadFile";
 import styles from "./RequestForm.module.css";
-import { FileUpload, FileDownload } from "@mui/icons-material";
-import { ShakeLittle } from "reshake";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAPIUrlState,
@@ -23,19 +19,15 @@ import {
   setAPIUrl,
   setAttackUrl,
 } from "../models/endPointsSlice";
-import { getJsonErrMsg, setJsonErrMsg } from "../models/errorSlice";
 import {
   getOpenState,
   getRowIdState,
   setOpen,
   setRowId,
 } from "../models/payloadsDialogSlice";
-import {
-  getPayloads,
-  setPayloads,
-  setSelections,
-} from "../models/payloadsSlice";
+import { getPayloads, setSelections } from "../models/payloadsSlice";
 import { PayloadsT } from "../models/PayloadsT";
+import { DataGridFooters } from "./DataGridFooters";
 
 const RequestForm = () => {
   const dispatch = useDispatch();
@@ -188,65 +180,6 @@ const columns = (handleDialogOpen: (id: GridRowId) => void): GridColDef[] => {
       sortComparator: resultsComparator,
     },
   ];
-};
-
-const DataGridFooters = (payloads: PayloadsT) => {
-  const [errShakeActive, setErrShakeActive] = React.useState(true);
-  const jsonErrMsg = useSelector(getJsonErrMsg);
-  const dispatch = useDispatch();
-  const setFileReadError = (err: string | null) => {
-    dispatch(setJsonErrMsg(err));
-    setTimeout(() => {
-      setErrShakeActive(false);
-    }, 500);
-  };
-  return (
-    <Box sx={{ p: 1, display: "flex" }}>
-      <Tooltip title="Upload Payloads">
-        <Button component="label" sx={{ color: "#eee" }}>
-          <FileUpload />
-          <input
-            type="file"
-            hidden
-            accept=".json"
-            onChange={(e) => {
-              onChangeInputFile(e, setPayloads, setFileReadError);
-              e.target.value = "";
-            }}
-          />
-        </Button>
-      </Tooltip>
-      <Tooltip title="Download Payloads">
-        <Button
-          component="label"
-          sx={{ color: "#eee" }}
-          onClick={() => {
-            downloadFile(
-              payloads.map((payload) => {
-                return {
-                  payload: payload.payload,
-                  expected: payload.unexpected,
-                  severity: payload.severity,
-                };
-              }),
-              "payloads.json"
-            );
-          }}
-        >
-          <FileDownload />
-        </Button>
-      </Tooltip>
-      {jsonErrMsg && (
-        <ShakeLittle
-          active={errShakeActive}
-          fixed={true}
-          className={styles.errMsg}
-        >
-          Error: {jsonErrMsg}
-        </ShakeLittle>
-      )}
-    </Box>
-  );
 };
 
 export default RequestForm;
