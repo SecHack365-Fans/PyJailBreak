@@ -25,6 +25,7 @@ type ParamsT = {
   handleClose: () => void;
 };
 
+// TODO: refactor onClick, onChange
 export const PayloadsEditor = (params: ParamsT) => {
   const [newPayload, setNewPayload] = React.useState("");
   const dispatch = useDispatch();
@@ -43,6 +44,26 @@ export const PayloadsEditor = (params: ParamsT) => {
                 fullWidth
                 variant="standard"
                 autoComplete="off"
+                onChange={(e) => {
+                  const newPayloads = [
+                    ...payloads.slice(0, params.rowId as number),
+                    {
+                      ...payloads[params.rowId as number],
+                      payload: [
+                        ...payloads[params.rowId as number].payload.slice(
+                          0,
+                          idx
+                        ),
+                        e.target.value,
+                        ...payloads[params.rowId as number].payload.slice(
+                          idx + 1
+                        ),
+                      ],
+                    },
+                    ...payloads.slice((params.rowId as number) + 1),
+                  ];
+                  dispatch(setPayloads(newPayloads));
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
