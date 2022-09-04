@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import toast, { Toaster } from "react-hot-toast";
-import { getAPIUrlState, getAttackUrlState } from "../models/endPointsSlice";
+import { getAPIUrlState, getVulnDomain, getVulnPort } from "../models/endPointsSlice";
 import {
   getPayloads,
   getSelections,
@@ -17,7 +17,8 @@ import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 const ExecuteAttack = () => {
   const apiUrl = useSelector(getAPIUrlState);
-  const attackUrl = useSelector(getAttackUrlState);
+  const vulnDomain = useSelector(getVulnDomain);
+  const vulnPort = useSelector(getVulnPort);
   const payloads = useSelector(getPayloads);
   const selections = useSelector(getSelections); // idがnumber型なのでこれはnumber[]
   const dispatch: Dispatch<AnyAction> = useDispatch();
@@ -29,8 +30,8 @@ const ExecuteAttack = () => {
         size="large"
         endIcon={<SendIcon />}
         onClick={() => {
-          if (!validation(apiUrl, attackUrl, payloads, selections)) {
-            executeAttack(apiUrl, attackUrl, payloads, selections, dispatch);
+          if (!validation(apiUrl, vulnDomain, vulnPort, payloads, selections)) {
+            executeAttack(apiUrl, vulnDomain, vulnPort, payloads, selections, dispatch);
           }
         }}
         sx={{
@@ -59,7 +60,8 @@ type ChangePointT = {
 
 const executeAttack = async (
   apiUrl: string,
-  attackUrl: string,
+  vulnDomain: string,
+  vulnPort: number,
   payloads: PayloadsT,
   selections: GridSelectionModel,
   dispatch: Dispatch<AnyAction>
@@ -84,8 +86,8 @@ const executeAttack = async (
         unexpected: payload.unexpected,
         severity: payload.severity,
         endpoint: {
-          domain: attackUrl.split(":")[0], // FIXME
-          port: attackUrl.split(":")[1],
+          domain: vulnDomain,
+          port: vulnPort,
         },
       }),
     })
@@ -101,7 +103,8 @@ const executeAttack = async (
 
 const validation = (
   apiUrl: string,
-  attackUrl: string,
+  vulnDomain: string,
+  vulnPort: number | undefined,
   payloads: PayloadsT,
   selections: GridSelectionModel
 ) => {
@@ -110,8 +113,12 @@ const validation = (
     toast.error("Please enter an Endpoint for PyJailBreak Server");
     isError = true;
   }
-  if (attackUrl === "") {
-    toast.error("Please enter an Endpoint for Target Server");
+  if (vulnDomain === "") {
+    toast.error("Please enter an Host for Target Server");
+    isError = true;
+  }
+  if (typeof vulnPort === "undefined") {
+    toast.error("Please enter an Port for Target Server");
     isError = true;
   }
   if (payloads.length === 0) {

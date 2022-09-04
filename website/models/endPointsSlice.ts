@@ -5,7 +5,8 @@ import { RootState } from "./store";
 
 type Url = {
   APIUrl: string;
-  attackUrl: string;
+  vulnDomain: string;
+  vulnPort: number;
 };
 
 type ActionT = {
@@ -13,9 +14,20 @@ type ActionT = {
   payload: string;
 };
 
+type vulnDomainActionT = {
+  type: string;
+  payload: string;
+};
+
+type vulnPortActionT = {
+  type: string;
+  payload: number | undefined;
+};
+
 const initialState: Url = {
   APIUrl: "http://192.168.11.9:8080", // バックエンドのエンドポイント
-  attackUrl: "localhost:4444", // やられサーバのエンドポイント
+  vulnDomain: "localhost", // やられサーバのホスト
+  vulnPort: 4444, // やられサーバのポート
 };
 
 export const endPointsSlice = createSlice({
@@ -25,17 +37,22 @@ export const endPointsSlice = createSlice({
     setAPIUrl: (state, action: ActionT) => {
       state.APIUrl = action.payload;
     },
-    setAttackUrl: (state, action: ActionT) => {
-      state.attackUrl = action.payload;
+    setVulnDomain: (state, action: vulnDomainActionT) => {
+      state.vulnDomain = action.payload;
+    },
+    setVulnPort: (state, action: vulnPortActionT) => {
+      state.vulnPort = action.payload;
     },
   },
 });
 
-export const { setAPIUrl, setAttackUrl } = endPointsSlice.actions;
+export const { setAPIUrl, setVulnDomain, setVulnPort } = endPointsSlice.actions;
 
 export const getAPIUrlState = (state: RootState) =>
   state.endPointsReducer.APIUrl;
-export const getAttackUrlState = (state: RootState) =>
-  state.endPointsReducer.attackUrl;
+export const getVulnDomain = (state: RootState) =>
+  state.endPointsReducer.vulnDomain;
+  export const getVulnPort = (state: RootState) =>
+  state.endPointsReducer.vulnPort;
 
 export default endPointsSlice.reducer;

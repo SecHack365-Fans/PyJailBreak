@@ -3,7 +3,7 @@
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
 import { DialogEditor } from "./DialogEditor";
-import { TextField, Chip } from "@mui/material";
+import { TextField, Chip, Box } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -15,9 +15,11 @@ import styles from "./RequestForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAPIUrlState,
-  getAttackUrlState,
+  getVulnDomain,
+  getVulnPort,
   setAPIUrl,
-  setAttackUrl,
+  setVulnDomain,
+  setVulnPort,
 } from "../models/endPointsSlice";
 import { setOpen, setRowId, setMode } from "../models/payloadsDialogSlice";
 import {
@@ -31,10 +33,10 @@ import { DataGridFooters } from "./DataGridFooters";
 const RequestForm = () => {
   const dispatch = useDispatch();
   const apiUrl = useSelector(getAPIUrlState);
-  const attackUrl = useSelector(getAttackUrlState);
+  const vulnDomain = useSelector(getVulnDomain);
+  const vulnPort = useSelector(getVulnPort);
   const payloads: PayloadsT = useSelector(getPayloads);
   const textFieldStyle = {
-    width: "40%",
     maxWidth: "600px",
     m: "1em 2px 1em 2px",
     "& label": {
@@ -50,6 +52,12 @@ const RequestForm = () => {
       "&:hover fieldset": {
         borderColor: "#ddd",
       },
+    },
+  };
+  const targetTextStyle = {
+    width: "40%",
+    "& ,MuiFormControl-root": {
+      mb: 0,
     },
   };
   const handleDialogOpen = (
@@ -76,28 +84,57 @@ const RequestForm = () => {
   };
   return (
     <div className={styles.body}>
-      <TextField
-        required
-        label="Endpoint for PyJailBreak Server"
-        variant="outlined"
-        placeholder="https://localhost:8080"
-        value={apiUrl}
-        onChange={(e) => {
-          dispatch(setAPIUrl(e.target.value));
-        }}
-        sx={textFieldStyle}
-      />
-      <TextField
-        required
-        label="Endpoint for Target Server"
-        variant="outlined"
-        placeholder="this.is.vulnable.server:8000"
-        value={attackUrl}
-        onChange={(e) => {
-          dispatch(setAttackUrl(e.target.value));
-        }}
-        sx={textFieldStyle}
-      />
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ width: "100%" }}>
+          <TextField
+            required
+            label="Endpoint for PyJailBreak Server"
+            variant="outlined"
+            placeholder="https://localhost:8080"
+            value={apiUrl}
+            onChange={(e) => {
+              dispatch(setAPIUrl(e.target.value));
+            }}
+            sx={Object.assign({}, textFieldStyle, { width: "80%" })}
+          />
+        </div>
+        <div style={{ width: "100%" }}>
+          <TextField
+            required
+            label="Domain for Target Server"
+            variant="outlined"
+            placeholder="this.is.vulnable.server"
+            value={vulnDomain}
+            onChange={(e) => {
+              dispatch(setVulnDomain(e.target.value));
+            }}
+            sx={Object.assign({}, textFieldStyle, targetTextStyle)}
+          />
+          <TextField
+            required
+            label="Port for Target Server"
+            variant="outlined"
+            placeholder="4000"
+            value={vulnPort}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "") {
+                dispatch(setVulnPort(undefined));
+              } else {
+                const port = Math.min(
+                  parseInt(value.substring(0, 5).replace(/[^0-9]/g, "")),
+                  65536
+                );
+                dispatch(setVulnPort(port));
+              }
+            }}
+            sx={Object.assign({}, textFieldStyle, targetTextStyle)}
+          />
+          <p
+            style={{ color: "#aaa", margin: "3px 0 16px 0", fontSize: "0.75rem" }}
+          >{`Like this: nc ${vulnDomain} ${vulnPort ?? ""}`}</p>
+        </div>
+      </Box>
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={payloads}
