@@ -9,8 +9,8 @@ const Header: React.FC<Props> = ({ title, description }: Props) => {
   const defaultTitle = "PyJailBreak";
   const defaultDescription =
     "Black box automated vulnerability scanning tool for Python socket servers";
-  const perfectTitle = title ? title : defaultTitle
-  const perfectDescription = description ? description : defaultTitle
+  const perfectTitle = title ?? defaultTitle
+  const perfectDescription = description ?? defaultDescription
   return (
     <Head>
       <title>{title}</title>
