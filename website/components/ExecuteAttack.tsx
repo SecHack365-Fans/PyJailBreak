@@ -114,7 +114,7 @@ const validation = (
     isError = true;
   }
   if (vulnDomain === "") {
-    toast.error("Please enter an Host for Target Server");
+    toast.error("Please enter an Domain for Target Server");
     isError = true;
   }
   if (typeof vulnPort === "undefined") {

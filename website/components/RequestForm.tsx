@@ -131,8 +131,16 @@ const RequestForm = () => {
             sx={Object.assign({}, textFieldStyle, targetTextStyle)}
           />
           <p
-            style={{ color: "#aaa", margin: "3px 0 16px 0", fontSize: "0.75rem" }}
-          >{`Like this: nc ${vulnDomain} ${vulnPort ?? ""}`}</p>
+            style={{
+              color: "#aaa",
+              margin: "3px 0 16px 0",
+              fontSize: "0.75rem",
+            }}
+          >
+            {vulnDomain !== "" || vulnPort
+              ? `Like this: nc ${vulnDomain} ${vulnPort ?? ""}`
+              : ""}
+          </p>
         </div>
       </Box>
       <div style={{ height: 400, width: "100%" }}>
