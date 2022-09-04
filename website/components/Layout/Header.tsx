@@ -28,7 +28,6 @@ const Header: React.FC<Props> = ({ title, description }: Props) => {
         property="og:image"
         content="https://raw.githubusercontent.com/SecHack365-Fans/PyJailBreak/main/assets/logo_readme_title.png"
       />
-      <meta name="twitter:card" content="summary" />
     </Head>
   );
 };
