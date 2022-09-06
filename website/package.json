@@ -25,7 +25,7 @@
     "react-hot-toast": "^2.3.0",
     "react-redux": "^8.0.2",
     "swagger-ui-react": "^4.13.0",
-    "zod": "^3.17.10"
+    "zod": "^3.19.0"
   },
   "devDependencies": {
     "@types/node": "18.0.6",
