@@ -72,7 +72,7 @@ def socket_attack(data):
         return jsonify({"success": False, "severity": "unknown", "error": f"{str(e)}"})
 
 
-@app.route("/scan", methods=["POST","OPTION"])
+@app.route("/scan", methods=["POST"])
 def scan():
     try:
         # POST Data 取得
