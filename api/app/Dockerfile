@@ -3,11 +3,7 @@ FROM python:3.10
 RUN mkdir /var/www
 WORKDIR /var/www
 
-ENV DEBIAN_FRONTEND noninteractive
-
 COPY requirements.txt .
-
-
 
 RUN pip3 install -r requirements.txt
 
