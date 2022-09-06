@@ -8,12 +8,11 @@ app = Flask(__name__)
 CORS(
     app,
     origins=[
-        "https://fans.sechack365.com/",
-        "https://sechack365-fans.github.io/",
+        "https://fans.sechack365.com",
+        "https://sechack365-fans.github.io",
         "http://localhost:3000",
     ],
 )
-
 
 def http_attack(data, protocol, method):
     try:
@@ -73,7 +72,7 @@ def socket_attack(data):
         return jsonify({"success": False, "severity": "unknown", "error": f"{str(e)}"})
 
 
-@app.route("/scan", methods=["POST"])
+@app.route("/scan", methods=["POST","OPTION"])
 def scan():
     try:
         # POST Data 取得
