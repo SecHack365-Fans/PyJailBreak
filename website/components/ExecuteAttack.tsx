@@ -69,10 +69,10 @@ const executeAttack = async (
   dispatch: Dispatch<AnyAction>
 ) => {
   toast.success("Scan Started!");
+  let isError = false;
   for (const selectedId of selections) {
-    console.log("selectedId: ", selectedId)
     const payload = payloads.find((payload) => payload.id === selectedId);
-    if (typeof payload === "undefined") {
+    if (isError || typeof payload === "undefined") {
       continue;
     }
     const changePoint:ChangePointT = { id: selectedId, severity: "executing" };
@@ -100,6 +100,11 @@ const executeAttack = async (
         const changePoint:ChangePointT = { id: selectedId, severity: json.severity };
         payloads = changePayloadStateExec(payloads, changePoint);
         dispatch(setPayloads(payloads));
+      }).catch((err) => {
+        isError = true;
+        console.error(err);
+        toast.error("Scan Failed! Please check your input parameters.");
+        return
       });
   }
 };
