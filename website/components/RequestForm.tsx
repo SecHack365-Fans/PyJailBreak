@@ -174,17 +174,11 @@ const RequestForm = () => {
             }}
             sx={Object.assign({}, textFieldStyle, targetTextStyle)}
           />
-          <p
-            style={{
-              color: "#aaa",
-              margin: "3px 0 16px 0",
-              fontSize: "0.75rem",
-            }}
-          >
-            {vulnDomain !== "" || vulnPort
-              ? `Like this: nc ${vulnDomain} ${vulnPort ?? ""}`
-              : ""}
-          </p>
+          <CommandExample
+            protocol={protocol}
+            vulnDomain={vulnDomain}
+            vulnPort={vulnPort}
+          />
         </div>
       </Box>
       <div style={{ height: 400, width: "100%" }}>
@@ -285,6 +279,40 @@ const columns = (): GridColDef[] => {
       sortComparator: resultsComparator,
     },
   ];
+};
+
+const CommandExample = (props: {
+  protocol: string;
+  vulnDomain: string;
+  vulnPort: number;
+}) => {
+  const style = {
+    color: "#aaa",
+    margin: "3px 0 16px 0",
+    fontSize: "0.75rem",
+  };
+  const protocol2Command = {
+    nc: `nc ${props.vulnDomain} ${props.vulnPort ?? ""}`,
+    http_get: `curl http://${props.vulnDomain}:${props.vulnPort ?? ""}`,
+    http_post: `curl -X POST http://${props.vulnDomain}:${
+      props.vulnPort ?? ""
+    }`,
+    https_get: `curl https://${props.vulnDomain}:${
+      props.vulnPort ?? ""
+    }`,
+    https_post: `curl -X POST https://${props.vulnDomain}:${
+      props.vulnPort ?? ""
+    }`,
+  };
+  if (props.vulnDomain === "" || props.protocol === "") {
+    return <p style={style}></p>;
+  } else {
+    return (
+      <p style={style}>{`Like this: ${
+        protocol2Command[props.protocol] ?? "error"
+      }`}</p>
+    );
+  }
 };
 
 export default RequestForm;
