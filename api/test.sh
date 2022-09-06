@@ -5,7 +5,8 @@
 ##################################################
 # {
 #    "endpoint": {
-#        "domain": "localhost", 
+#        "protocol": "nc",
+#        "domain": "localhost",
 #        "port": "4444"
 #    },
 #    "payload": ["help()", "os", ":!printenv"],
@@ -21,7 +22,8 @@
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "domain": "localhost", 
+        "protocol": "nc",
+        "domain": "localhost",
         "port": "4441"
     },
     "payload": ["77*77"],
@@ -31,7 +33,8 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "domain": "localhost", 
+        "protocol": "nc",
+        "domain": "localhost",
         "port": "4441"
     },
     "payload": ["__import__(\"os\").system(\"printenv\")"], 
@@ -43,7 +46,8 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "domain": "localhost", 
+        "protocol": "nc",
+        "domain": "localhost",
         "port": "4441"
     },
     "payload": ["print(\"Satoki\")"], 
@@ -55,7 +59,8 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "domain": "localhost", 
+        "protocol": "nc",
+        "domain": "localhost",
         "port": "4443"
     },
     "payload": ["exec(chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(111+1)+chr(111)+chr(111+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111)+chr(111+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1)+chr(11+11+11+11+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1+1+1+1+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111+1)+chr(111+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1))"], 
@@ -66,7 +71,8 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "domain": "localhost", 
+        "protocol": "nc",
+        "domain": "localhost",
         "port": "4444"
     },
     "payload": ["help()", "os", ":!printenv"], 
@@ -74,3 +80,15 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
     "severity":"critical"
 }'
 
+# http
+curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
+'{
+    "endpoint": {
+        "protocol": "http_get",
+        "domain": "localhost",
+        "port": "4445"
+    },
+    "payload": ["q=<script>", "q=<script>&s=alert(1)</script>"], 
+    "unexpected": ["<script>alert(1)</script>"], 
+    "severity":"critical"
+}'

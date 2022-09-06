@@ -1,3 +1,5 @@
+import requests
+import urllib.parse
 from pwn import *
 from flask_cors import CORS
 from flask import Flask, jsonify, request
@@ -13,20 +15,42 @@ CORS(
 )
 
 
-@app.route("/scan", methods=["POST"])
-def scan():
+def http_attack(data, protocol, method):
+    if 1:#try:
+        status = "safe"
+        wtime = 1
+        response = ""
+        if method == "GET":
+            # ペイロード送信, 応答取得
+            for p in data["payload"]:
+                response += requests.get(f'{protocol}://{data["endpoint"]["domain"]}:{data["endpoint"]["port"]}?{p}', timeout=wtime).text
+        if method == "POST":
+            # ペイロード送信, 応答取得
+            for p in data["payload"]:
+                response += requests.post(f'{protocol}://{data["endpoint"]["domain"]}:{data["endpoint"]["port"]}', data=urllib.parse.parse_qs(p), timeout=wtime).text
+        # 期待していない文字列を検証
+        for u in data["unexpected"]:
+            if u in response:
+                status = data["severity"]
+        # 結果を返す
+        return jsonify({"success": True, "severity": status})
+    #except:
+        pass
+    return jsonify({"success": False, "severity": "serverError"})
+
+def socket_attack(data):
     try:
         status = "safe"
-        # POST Data 取得
-        data = request.get_json()
+        wtime = 0.2
         # 検証先に接続
         io = remote(data["endpoint"]["domain"], data["endpoint"]["port"])
+        #io = remote("localhost", data["endpoint"]["port"]) # デモ用制限
         # 初期応答取得
-        response = io.recvrepeat(0.2).decode()
-        # ペイロード送信&応答取得
+        response = io.recvrepeat(wtime).decode()
+        # ペイロード送信, 応答取得
         for p in data["payload"]:
             io.sendline(p.encode())
-            response += io.recvrepeat(0.2).decode()
+            response += io.recvrepeat(wtime).decode()
         # 期待していない文字列を検証
         for u in data["unexpected"]:
             if u in response:
@@ -40,6 +64,30 @@ def scan():
             pass
         return jsonify({"success": False, "severity": "serverError"})
     return jsonify({"success": True, "severity": status})
+
+@app.route("/scan", methods=["POST"])
+def scan():
+    try:
+        # POST Data 取得
+        data = request.get_json()
+        # 検証対象の振り分け
+        match data["endpoint"]["protocol"]:
+            case "nc":
+                return socket_attack(data)
+            case "http_get":
+                return http_attack(data, "http", "GET")
+            case "http_post":
+                return http_attack(data, "http", "POST")
+            case "https_get":
+                return http_attack(data, "https", "GET")
+            case "https_post":
+                return http_attack(data, "https", "POST")
+    except:
+        pass
+    return jsonify({"success": False, "severity": "serverError"})
+
+
+
 
 
 if __name__ == "__main__":
