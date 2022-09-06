@@ -49,7 +49,7 @@ const RequestForm = () => {
   const payloads: PayloadsT = useSelector(getPayloads);
   const textFieldStyle = {
     maxWidth: "600px",
-    m: "1em 2px 1em 2px",
+    m: "1em 2px 0.5em 2px",
     "& label": {
       color: "#eee",
     },
@@ -60,29 +60,16 @@ const RequestForm = () => {
       "& fieldset": {
         borderColor: "#ccc",
       },
-      "&:hover fieldset": {
-        borderColor: "#ddd",
-      },
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#ddd"
+      }
     },
   };
   const targetTextStyle = {
-    width: "35%",
     minWidth: 120,
     "& .MuiFormControl-root": {
       mb: 0,
     },
-  };
-  const formCotrolStyle = {
-    // TODO: この辺のCSSつらい
-    width: "20%",
-    minWidth: 120,
-    m: "0 4px 0 2px",
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#ccc",
-    },
-  };
-  const selectBoxStyle = {
-    m: "1em 2px 1em 2px",
   };
   const handleDialogOpen = (
     gridRowId: GridRowId,
@@ -123,26 +110,22 @@ const RequestForm = () => {
           />
         </div>
         <div style={{ width: "100%" }}>
-          <FormControl
-            variant="standard"
-            sx={Object.assign({}, formCotrolStyle)}
+          <TextField
+            select
+            variant="outlined"
+            label="Protocol"
+            value={protocol}
+            onChange={(e) => dispatch(setProtocol(e.target.value))}
+            sx={Object.assign({}, textFieldStyle, {
+              width: "25%",
+            })}
           >
-            <InputLabel id="protocol-select">Age</InputLabel>
-            <Select
-              variant="outlined"
-              labelId="protocol-select"
-              label="Age"
-              value={protocol}
-              onChange={(e) => dispatch(setProtocol(e.target.value))}
-              sx={Object.assign({}, selectBoxStyle, { width: "100%" })}
-            >
-              <MenuItem value="nc">Netcat</MenuItem>
-              <MenuItem value="http_get">HTTP (GET)</MenuItem>
-              <MenuItem value="http_post">HTTP (POST)</MenuItem>
-              <MenuItem value="https_get">HTTPS (GET)</MenuItem>
-              <MenuItem value="https_post">HTTPS (POST)</MenuItem>
-            </Select>
-          </FormControl>
+            <MenuItem value="nc">Netcat</MenuItem>
+            <MenuItem value="http_get">HTTP (GET)</MenuItem>
+            <MenuItem value="http_post">HTTP (POST)</MenuItem>
+            <MenuItem value="https_get">HTTPS (GET)</MenuItem>
+            <MenuItem value="https_post">HTTPS (POST)</MenuItem>
+          </TextField>
           <TextField
             required
             label="Domain for Target Server"
@@ -152,7 +135,9 @@ const RequestForm = () => {
             onChange={(e) => {
               dispatch(setVulnDomain(e.target.value));
             }}
-            sx={Object.assign({}, textFieldStyle, targetTextStyle)}
+            sx={Object.assign({}, textFieldStyle, targetTextStyle, {
+              width: "40%",
+            })}
           />
           <TextField
             required
@@ -172,7 +157,9 @@ const RequestForm = () => {
                 dispatch(setVulnPort(port));
               }
             }}
-            sx={Object.assign({}, textFieldStyle, targetTextStyle)}
+            sx={Object.assign({}, textFieldStyle, targetTextStyle, {
+              width: "20%",
+            })}
           />
           <CommandExample
             protocol={protocol}
@@ -297,9 +284,7 @@ const CommandExample = (props: {
     http_post: `curl -X POST http://${props.vulnDomain}:${
       props.vulnPort ?? ""
     }`,
-    https_get: `curl https://${props.vulnDomain}:${
-      props.vulnPort ?? ""
-    }`,
+    https_get: `curl https://${props.vulnDomain}:${props.vulnPort ?? ""}`,
     https_post: `curl -X POST https://${props.vulnDomain}:${
       props.vulnPort ?? ""
     }`,
