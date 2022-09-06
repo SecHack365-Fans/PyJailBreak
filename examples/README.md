@@ -1,6 +1,8 @@
 # やられサーバ集
 
 各やられサーバの一括起動  
+**[バックエンド](../api/)をdockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります**
+
 
 ```bash
 $ docker-compose up
