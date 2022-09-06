@@ -56,7 +56,8 @@ export const endPointsSlice = createSlice({
   },
 });
 
-export const { setAPIUrl, setProtocol, setVulnDomain, setVulnPort } = endPointsSlice.actions;
+export const { setAPIUrl, setProtocol, setVulnDomain, setVulnPort } =
+  endPointsSlice.actions;
 
 export const getAPIUrlState = (state: RootState) =>
   state.endPointsReducer.APIUrl;

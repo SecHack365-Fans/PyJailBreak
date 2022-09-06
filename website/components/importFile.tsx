@@ -16,7 +16,7 @@ const userBase64Payloads = (result: string | ArrayBuffer) => {
 
 export const onChangeInputFile = (
   e: React.ChangeEvent<HTMLInputElement>,
-  setPayloads: (payloads: PayloadsT) => void,
+  setPayloads: (payloads: PayloadsT) => void
 ) => {
   if (!e.target.files || !e.target.files[0]) {
     toast.error("Unexpected Error!");
@@ -48,11 +48,11 @@ export const onChangeInputFile = (
         id: id,
         ...payload,
       }));
-      console.log(idxedParsedJson)
+      console.log(idxedParsedJson);
       const persedPayloads = PayloadsS.parse(idxedParsedJson);
       setPayloads(persedPayloads);
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast.error("ペイロードファイルの形式が不正です");
     }
   };

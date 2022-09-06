@@ -4,14 +4,24 @@ import React from "react";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import toast, { Toaster } from "react-hot-toast";
-import { getAPIUrlState, getProtocol, getVulnDomain, getVulnPort } from "../models/endPointsSlice";
+import {
+  getAPIUrlState,
+  getProtocol,
+  getVulnDomain,
+  getVulnPort,
+} from "../models/endPointsSlice";
 import {
   getPayloads,
   getSelections,
   setPayloads,
 } from "../models/payloadsSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { PayloadsT, SeverityT } from "../models/PayloadsT";
+import {
+  PayloadsT,
+  SeverityT,
+  APIResponseS,
+  APIResponseT,
+} from "../models/PayloadsT";
 import { GridSelectionModel, GridRowId } from "@mui/x-data-grid/models";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
@@ -31,8 +41,25 @@ const ExecuteAttack = () => {
         size="large"
         endIcon={<SendIcon />}
         onClick={() => {
-          if (!validation(apiUrl, protocol, vulnDomain, vulnPort, payloads, selections)) {
-            executeAttack(apiUrl, protocol, vulnDomain, vulnPort, payloads, selections, dispatch);
+          if (
+            !validation(
+              apiUrl,
+              protocol,
+              vulnDomain,
+              vulnPort,
+              payloads,
+              selections
+            )
+          ) {
+            executeAttack(
+              apiUrl,
+              protocol,
+              vulnDomain,
+              vulnPort,
+              payloads,
+              selections,
+              dispatch
+            );
           }
         }}
         sx={{
@@ -57,7 +84,7 @@ const ExecuteAttack = () => {
 type ChangePointT = {
   id: GridRowId;
   severity: SeverityT;
-}
+};
 
 const executeAttack = async (
   apiUrl: string,
@@ -69,43 +96,64 @@ const executeAttack = async (
   dispatch: Dispatch<AnyAction>
 ) => {
   toast.success("Scan Started!");
-  let isError = false;
+  let isPushError = false;
   for (const selectedId of selections) {
     const payload = payloads.find((payload) => payload.id === selectedId);
-    if (isError || typeof payload === "undefined") {
+    if (typeof payload === "undefined") {
       continue;
     }
-    const changePoint:ChangePointT = { id: selectedId, severity: "executing" };
+    const changePoint: ChangePointT = { id: selectedId, severity: "executing" };
     payloads = changePayloadStateExec(payloads, changePoint);
     dispatch(setPayloads(payloads));
-    await fetch(`${apiUrl}/scan`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        payload: payload.payload,
-        unexpected: payload.unexpected,
-        severity: payload.severity,
-        endpoint: {
-          protocol: protocol,
-          domain: vulnDomain,
-          port: vulnPort,
+    try {
+      const res = await fetch(`${apiUrl}/scan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => { // TODO: validation with zod
-        console.log("API response: ", json)
-        const changePoint:ChangePointT = { id: selectedId, severity: json.severity };
-        payloads = changePayloadStateExec(payloads, changePoint);
-        dispatch(setPayloads(payloads));
-      }).catch((err) => {
-        isError = true;
-        console.error(err);
-        toast.error("Scan Failed! Please check your input parameters.");
-        return
+        body: JSON.stringify({
+          payload: payload.payload,
+          unexpected: payload.unexpected,
+          severity: payload.severity,
+          endpoint: {
+            // protocol: protocol,
+            domain: vulnDomain,
+            port: vulnPort,
+          },
+        }),
       });
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
+      const json: APIResponseT = await res.json();
+      console.log("API response: ", json);
+      const parseResult = APIResponseS.safeParse(json);
+      if (parseResult.success === false) {
+        console.error(parseResult.error);
+        throw new Error(`Internal Server Error`);
+      }
+      if (!json.success) {
+        throw new Error(json.error);
+      }
+      const changePoint: ChangePointT = {
+        id: selectedId,
+        severity: json.severity,
+      };
+      payloads = changePayloadStateExec(payloads, changePoint);
+      dispatch(setPayloads(payloads));
+    } catch (err) {
+      if (!isPushError) {
+        toast.error(err.message);
+        isPushError = true;
+      }
+      console.error(err);
+      const changePoint: ChangePointT = {
+        id: selectedId,
+        severity: "unknown",
+      };
+      payloads = changePayloadStateExec(payloads, changePoint);
+      dispatch(setPayloads(payloads));
+    }
   }
 };
 

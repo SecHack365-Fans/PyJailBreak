@@ -14,7 +14,7 @@ export const DataGridFooters = () => {
   const payloads: PayloadsT = useSelector(getPayloads);
   const setPayloadsCallback = (newPayloads: PayloadsT) => {
     dispatch(setPayloads(newPayloads));
-  }
+  };
   return (
     <Box sx={{ p: 1, display: "flex" }}>
       <Tooltip title="Upload Payloads">

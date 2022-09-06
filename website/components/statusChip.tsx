@@ -7,7 +7,7 @@ import {
   Cancel,
   HelpOutline,
   Loop,
-  PriorityHigh
+  PriorityHigh,
 } from "@mui/icons-material";
 import { GridComparatorFn } from "@mui/x-data-grid";
 import { SeverityT } from "../models/PayloadsT";
@@ -61,7 +61,7 @@ const statusChip = (severity: SeverityT): ChipsT => {
         />
       ),
     },
-    serverError: {
+    unknown: {
       priority: 4,
       chip: (
         <Chip

@@ -2,7 +2,7 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 
-import endPointsReducer from "./endPointsSlice";;
+import endPointsReducer from "./endPointsSlice";
 import payloadsReducer from "./payloadsSlice";
 import payloadsDialogReducer from "./payloadsDialogSlice";
 
