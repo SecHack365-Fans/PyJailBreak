@@ -5,11 +5,17 @@ import { RootState } from "./store";
 
 type Url = {
   APIUrl: string;
+  protocol: string;
   vulnDomain: string;
   vulnPort: number;
 };
 
 type ActionT = {
+  type: string;
+  payload: string;
+};
+
+type protocolActionT = {
   type: string;
   payload: string;
 };
@@ -26,6 +32,7 @@ type vulnPortActionT = {
 
 const initialState: Url = {
   APIUrl: "http://192.168.11.9:8080", // バックエンドのエンドポイント
+  protocol: "nc",
   vulnDomain: "localhost", // やられサーバのホスト
   vulnPort: 4444, // やられサーバのポート
 };
@@ -37,6 +44,9 @@ export const endPointsSlice = createSlice({
     setAPIUrl: (state, action: ActionT) => {
       state.APIUrl = action.payload;
     },
+    setProtocol: (state, action: protocolActionT) => {
+      state.protocol = action.payload;
+    },
     setVulnDomain: (state, action: vulnDomainActionT) => {
       state.vulnDomain = action.payload;
     },
@@ -46,13 +56,15 @@ export const endPointsSlice = createSlice({
   },
 });
 
-export const { setAPIUrl, setVulnDomain, setVulnPort } = endPointsSlice.actions;
+export const { setAPIUrl, setProtocol, setVulnDomain, setVulnPort } = endPointsSlice.actions;
 
 export const getAPIUrlState = (state: RootState) =>
   state.endPointsReducer.APIUrl;
+export const getProtocol = (state: RootState) =>
+  state.endPointsReducer.protocol;
 export const getVulnDomain = (state: RootState) =>
   state.endPointsReducer.vulnDomain;
-  export const getVulnPort = (state: RootState) =>
+export const getVulnPort = (state: RootState) =>
   state.endPointsReducer.vulnPort;
 
 export default endPointsSlice.reducer;

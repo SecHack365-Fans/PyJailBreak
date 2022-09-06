@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import toast, { Toaster } from "react-hot-toast";
-import { getAPIUrlState, getVulnDomain, getVulnPort } from "../models/endPointsSlice";
+import { getAPIUrlState, getProtocol, getVulnDomain, getVulnPort } from "../models/endPointsSlice";
 import {
   getPayloads,
   getSelections,
@@ -17,6 +17,7 @@ import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 const ExecuteAttack = () => {
   const apiUrl = useSelector(getAPIUrlState);
+  const protocol = useSelector(getProtocol);
   const vulnDomain = useSelector(getVulnDomain);
   const vulnPort = useSelector(getVulnPort);
   const payloads = useSelector(getPayloads);
@@ -30,8 +31,8 @@ const ExecuteAttack = () => {
         size="large"
         endIcon={<SendIcon />}
         onClick={() => {
-          if (!validation(apiUrl, vulnDomain, vulnPort, payloads, selections)) {
-            executeAttack(apiUrl, vulnDomain, vulnPort, payloads, selections, dispatch);
+          if (!validation(apiUrl, protocol, vulnDomain, vulnPort, payloads, selections)) {
+            executeAttack(apiUrl, protocol, vulnDomain, vulnPort, payloads, selections, dispatch);
           }
         }}
         sx={{
@@ -60,6 +61,7 @@ type ChangePointT = {
 
 const executeAttack = async (
   apiUrl: string,
+  protocol: string,
   vulnDomain: string,
   vulnPort: number,
   payloads: PayloadsT,
@@ -86,6 +88,7 @@ const executeAttack = async (
         unexpected: payload.unexpected,
         severity: payload.severity,
         endpoint: {
+          protocol: protocol,
           domain: vulnDomain,
           port: vulnPort,
         },
@@ -103,6 +106,7 @@ const executeAttack = async (
 
 const validation = (
   apiUrl: string,
+  protocol: string,
   vulnDomain: string,
   vulnPort: number | undefined,
   payloads: PayloadsT,
@@ -113,12 +117,16 @@ const validation = (
     toast.error("Please enter an Endpoint for PyJailBreak Server");
     isError = true;
   }
+  if (protocol === "") {
+    toast.error("Please select a Protocol for Target Server");
+    isError = true;
+  }
   if (vulnDomain === "") {
-    toast.error("Please enter an Domain for Target Server");
+    toast.error("Please enter a Domain for Target Server");
     isError = true;
   }
   if (typeof vulnPort === "undefined") {
-    toast.error("Please enter an Port for Target Server");
+    toast.error("Please enter a Port for Target Server");
     isError = true;
   }
   if (payloads.length === 0) {

@@ -3,7 +3,15 @@
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
 import { DialogEditor } from "./DialogEditor";
-import { TextField, Chip, Box } from "@mui/material";
+import {
+  TextField,
+  Chip,
+  Box,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -15,9 +23,11 @@ import styles from "./RequestForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAPIUrlState,
+  getProtocol,
   getVulnDomain,
   getVulnPort,
   setAPIUrl,
+  setProtocol,
   setVulnDomain,
   setVulnPort,
 } from "../models/endPointsSlice";
@@ -33,6 +43,7 @@ import { DataGridFooters } from "./DataGridFooters";
 const RequestForm = () => {
   const dispatch = useDispatch();
   const apiUrl = useSelector(getAPIUrlState);
+  const protocol = useSelector(getProtocol);
   const vulnDomain = useSelector(getVulnDomain);
   const vulnPort = useSelector(getVulnPort);
   const payloads: PayloadsT = useSelector(getPayloads);
@@ -55,10 +66,23 @@ const RequestForm = () => {
     },
   };
   const targetTextStyle = {
-    width: "40%",
-    "& ,MuiFormControl-root": {
+    width: "35%",
+    minWidth: 120,
+    "& .MuiFormControl-root": {
       mb: 0,
     },
+  };
+  const formCotrolStyle = {
+    // TODO: この辺のCSSつらい
+    width: "20%",
+    minWidth: 120,
+    m: "0 4px 0 2px",
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#ccc",
+    },
+  };
+  const selectBoxStyle = {
+    m: "1em 2px 1em 2px",
   };
   const handleDialogOpen = (
     gridRowId: GridRowId,
@@ -85,7 +109,7 @@ const RequestForm = () => {
   return (
     <div className={styles.body}>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", maxWidth: "300px" }}>
           <TextField
             required
             label="Endpoint for PyJailBreak Server"
@@ -95,10 +119,30 @@ const RequestForm = () => {
             onChange={(e) => {
               dispatch(setAPIUrl(e.target.value));
             }}
-            sx={Object.assign({}, textFieldStyle, { width: "80%" })}
+            sx={Object.assign({}, textFieldStyle, { width: "100%" })}
           />
         </div>
         <div style={{ width: "100%" }}>
+          <FormControl
+            variant="standard"
+            sx={Object.assign({}, formCotrolStyle)}
+          >
+            <InputLabel id="protocol-select">Age</InputLabel>
+            <Select
+              variant="outlined"
+              labelId="protocol-select"
+              label="Age"
+              value={protocol}
+              onChange={(e) => dispatch(setProtocol(e.target.value))}
+              sx={Object.assign({}, selectBoxStyle, { width: "100%" })}
+            >
+              <MenuItem value="nc">Netcat</MenuItem>
+              <MenuItem value="http_get">HTTP (GET)</MenuItem>
+              <MenuItem value="http_post">HTTP (POST)</MenuItem>
+              <MenuItem value="https_get">HTTPS (GET)</MenuItem>
+              <MenuItem value="https_post">HTTPS (POST)</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             required
             label="Domain for Target Server"
