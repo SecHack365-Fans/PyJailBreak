@@ -116,7 +116,7 @@ const executeAttack = async (
           unexpected: payload.unexpected,
           severity: payload.severity,
           endpoint: {
-            // protocol: protocol,
+            protocol: protocol,
             domain: vulnDomain,
             port: vulnPort,
           },
