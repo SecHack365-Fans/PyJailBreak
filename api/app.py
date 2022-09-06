@@ -41,8 +41,8 @@ def http_attack(data, protocol, method):
                 status = data["severity"]
         # 結果を返す
         return jsonify({"success": True, "severity": status})
-    except:
-        return jsonify({"success": False, "severity": "unknown", "error": "serverError"})
+    except Exception as e:
+        return jsonify({"success": False, "severity": "unknown", "error": f"{str(e)}"})
 
 
 def socket_attack(data):
@@ -65,12 +65,12 @@ def socket_attack(data):
         # 検証先の接続を閉じる
         io.close()
         return jsonify({"success": True, "severity": status})
-    except:
+    except Exception as e:
         try:
             io.close()
         except:
             pass
-        return jsonify({"success": False, "severity": "unknown", "error": "serverError"})
+        return jsonify({"success": False, "severity": "unknown", "error": f"{str(e)}"})
 
 
 @app.route("/scan", methods=["POST"])
@@ -91,11 +91,10 @@ def scan():
             case "https_post":
                 return http_attack(data, "https", "POST")
             case _:
-                return jsonify({"success": False, "severity": "unknown", "error":"request format error"})
-    except KeyError:
-        return jsonify({"success": False, "severity": "unknown", "error":"request format error"})
-    except:
-        return jsonify({"success": False, "severity": "unknown", "error": "serverError"})
+                return jsonify({"success": False, "severity": "unknown", "error": "request format error"})
+    except Exception as e:
+        return jsonify({"success": False, "severity": "unknown", "error": f"{str(e)}"})
+
 
 
 if __name__ == "__main__":
