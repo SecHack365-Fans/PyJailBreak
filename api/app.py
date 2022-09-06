@@ -75,23 +75,22 @@ def socket_attack(data):
 
 @app.route("/scan", methods=["POST"])
 def scan():
-    try:
-        # POST Data 取得
-        data = request.get_json()
-        # 検証対象の振り分け
-        match data["endpoint"]["protocol"]:
-            case "nc":
-                return socket_attack(data)
-            case "http_get":
-                return http_attack(data, "http", "GET")
-            case "http_post":
-                return http_attack(data, "http", "POST")
-            case "https_get":
-                return http_attack(data, "https", "GET")
-            case "https_post":
-                return http_attack(data, "https", "POST")
-    except:
-        return jsonify({"success": False, "severity": "serverError"})
+    # POST Data 取得
+    data = request.get_json()
+    # 検証対象の振り分け
+    match data["endpoint"]["protocol"]:
+        case "nc":
+            return socket_attack(data)
+        case "http_get":
+            return http_attack(data, "http", "GET")
+        case "http_post":
+            return http_attack(data, "http", "POST")
+        case "https_get":
+            return http_attack(data, "https", "GET")
+        case "https_post":
+            return http_attack(data, "https", "POST")
+        case _:
+            return jsonify({"success": False, "severity": "serverError"})
 
 
 if __name__ == "__main__":
