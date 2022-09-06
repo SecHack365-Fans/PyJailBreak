@@ -79,7 +79,7 @@ def scan():
         data = request.get_json()
         # 検証対象の振り分け
         match data["endpoint"]["protocol"]:
-            case "nc":
+            case "socket":
                 return socket_attack(data)
             case "http_get":
                 return http_attack(data, "http", "GET")
