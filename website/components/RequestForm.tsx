@@ -3,15 +3,7 @@
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
 import { DialogEditor } from "./DialogEditor";
-import {
-  TextField,
-  Chip,
-  Box,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+import { TextField, Chip, Box, MenuItem } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -120,7 +112,7 @@ const RequestForm = () => {
               width: "25%",
             })}
           >
-            <MenuItem value="nc">Netcat</MenuItem>
+            <MenuItem value="socket">Socket</MenuItem>
             <MenuItem value="http_get">HTTP (GET)</MenuItem>
             <MenuItem value="http_post">HTTP (POST)</MenuItem>
             <MenuItem value="https_get">HTTPS (GET)</MenuItem>
@@ -279,7 +271,7 @@ const CommandExample = (props: {
     fontSize: "0.75rem",
   };
   const protocol2Command = {
-    nc: `nc ${props.vulnDomain} ${props.vulnPort ?? ""}`,
+    socket: `nc ${props.vulnDomain} ${props.vulnPort ?? ""}`,
     http_get: `curl http://${props.vulnDomain}:${props.vulnPort ?? ""}`,
     http_post: `curl -X POST http://${props.vulnDomain}:${
       props.vulnPort ?? ""
