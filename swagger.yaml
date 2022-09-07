@@ -24,25 +24,40 @@ paths:
               type: object
               properties:
                 endpoint:
-                  type: string
+                  type: object
+                  properties:
+                    protocol:
+                      type: string
+                    domain:
+                      type: string
+                    port:
+                      type: integer
                   description: Target vulnable server endpoint
-                  example: https://vulnable.com:8000
+                  example: {"protocol": "socket", "domain": "localhost", "port": 5000}
                 payload:
-                  type: string
+                  type: array
+                  items:
+                    type: string
                   description: Payload String for PyJail
-                  example: __import__('os').system('echo "Expected String"')
-                expected:
+                  example: ["__import__('os').system('echo \"Expected String\"')"]
+                payload_option:
                   type: string
+                unexpected:
+                  type: array
+                  items:
+                    type: string
                   description: Expected String for Payload executed
-                  example: Expected String
+                  example: ["Error"]
+                unexpected_option:
+                  type: string
               required:
                 - endpoint
                 - payload
-                - expected
+                - unexpected
             example:
               endpoint: https://vulnable.com:8000
-              payload: __import__('os').system('echo "Expected String"')
-              expected: Expected String
+              payload: ["__import__('os').system('echo \"Expected String\"')"]
+              unexpected: ["Error"]
       responses:
         "200":
           description: Success
@@ -56,9 +71,12 @@ paths:
                     example: true
                   severity:
                     type: string
-                    enum: [Safe, Warning, Critical]
-                    example: Critical
+                    enum: [safe, warning, critical, unknown]
+                    example: critical
                     description: Severity of the vulnerability (only `success` is `true`)
+                  error:
+                    type: string
+                    example: "Error Message"
                 required:
                   - success
               example:
