@@ -2,21 +2,19 @@ openapi: "3.0.0"
 info:
   title: PyJailBreak API
   version: "1.0.0"
-  description: Black box automated vulnerability scanning tool for Python socket servers
+  description: Black box automated vulnerability scanning tool for Python servers
   contact:
     name: satoki & xryuseix
     url: https://github.com/SecHack365-Fans
   license:
     name: MIT
     url: https://github.com/SecHack365-Fans/PyJailBreak/blob/main/LICENSE
-servers:
-  - url: TBD
 
 paths:
   /scan:
     post:
       summary: Scan a server for vulnerabilities
-      description: フロントで入力したものを受け取って、netcatで攻撃対象のエンドポイントへ攻撃する
+      description: フロントで入力したものを受け取って、攻撃対象のエンドポイントへ攻撃する
       requestBody:
         content:
           application/json:
@@ -33,7 +31,7 @@ paths:
                     port:
                       type: integer
                   description: Target vulnable server endpoint
-                  example: {"protocol": "socket", "domain": "localhost", "port": 5000}
+                  example: {"protocol": "socket", "domain": "localhost", "port": 4444}
                 payload:
                   type: array
                   items:
