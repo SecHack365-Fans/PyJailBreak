@@ -5,82 +5,140 @@
 ##################################################
 # {
 #    "endpoint": {
-#        "protocol": "nc",
+#        "protocol": "socket",
 #        "domain": "localhost",
 #        "port": "4444"
 #    },
-#    "payload": ["help()", "os", ":!printenv"],
+#    "payload": ["help()","os",":!printenv"],
+#    "payload_option": "plain",
 #    "unexpected": ["PyJailBreak_b981a35bde"],
-#    "severity":"critical"
+#    "unexpected_option": "plain",
+#    "severity": "critical"
 # }
 ##################################################
-# risks: safe, unknown, ["critical", "warning"]
-# envの文字列検証を行うことで、任意コード実行とファイル読み取りの両方を検知できる
+# severity: safe, unknown, warning, critical
+# payload_option: plain, eval
+# unexpected_option: plain, regex, eval
 
 
 # safe
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "protocol": "nc",
+        "protocol": "socket",
         "domain": "localhost",
         "port": "4441"
     },
     "payload": ["77*77"],
+    "payload_option": "plain",
     "unexpected": ["5929"],
-    "severity":"safe"
+    "unexpected_option": "plain",
+    "severity": "safe"
 }'
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "protocol": "nc",
+        "protocol": "socket",
         "domain": "localhost",
         "port": "4441"
     },
-    "payload": ["__import__(\"os\").system(\"printenv\")"], 
-    "unexpected": ["PyJailBreak_b981a35bde"], 
-    "severity":"critical"
+    "payload": ["__import__(\"os\").system(\"printenv\")"],
+    "payload_option": "plain",
+    "unexpected": ["PyJailBreak_b981a35bde"],
+    "unexpected_option": "plain",
+    "severity": "critical"
 }'
 
 # warning
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "protocol": "nc",
+        "protocol": "socket",
         "domain": "localhost",
         "port": "4441"
     },
-    "payload": ["print(\"Satoki\")"], 
-    "unexpected": ["Satoki"], 
-    "severity":"warning"
+    "payload": ["print(\"Satoki\")"],
+    "payload_option": "plain",
+    "unexpected": ["Satoki"],
+    "unexpected_option": "plain",
+    "severity": "warning"
 }'
 
 # critical
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "protocol": "nc",
+        "protocol": "socket",
         "domain": "localhost",
         "port": "4443"
     },
-    "payload": ["exec(chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(111+1)+chr(111)+chr(111+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111)+chr(111+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1)+chr(11+11+11+11+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1+1+1+1+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111+1)+chr(111+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1))"], 
-    "unexpected": ["PyJailBreak_b981a35bde"], 
-    "severity":"critical"
+    "payload": ["exec(chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(111+1)+chr(111)+chr(111+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111)+chr(111+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1)+chr(11+11+11+11+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1+1+1+1+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111+1)+chr(111+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1))"],
+    "payload_option": "plain",
+    "unexpected": ["PyJailBreak_b981a35bde"],
+    "unexpected_option": "plain",
+    "severity": "critical"
 }'
 
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
-        "protocol": "nc",
+        "protocol": "socket",
         "domain": "localhost",
         "port": "4444"
     },
-    "payload": ["help()", "os", ":!printenv"], 
-    "unexpected": ["PyJailBreak_b981a35bde"], 
-    "severity":"critical"
+    "payload": ["help()","os",":!printenv"],
+    "payload_option": "plain",
+    "unexpected": ["PyJailBreak_b981a35bde"],
+    "unexpected_option": "plain",
+    "severity": "critical"
 }'
 
-# http
+# unexpected_option regex
+curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
+'{
+    "endpoint": {
+        "protocol": "socket",
+        "domain": "localhost",
+        "port": "4441"
+    },
+    "payload": ["77*77"],
+    "payload_option": "plain",
+    "unexpected": ["[259]{4}"],
+    "unexpected_option": "regex",
+    "severity": "critical"
+}'
+
+# unexpected_option eval
+curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
+'{
+    "endpoint": {
+        "protocol": "socket",
+        "domain": "localhost",
+        "port": "4441"
+    },
+    "payload": ["77*77"],
+    "payload_option": "plain",
+    "unexpected": ["77*77"],
+    "unexpected_option": "eval",
+    "severity": "critical"
+}'
+
+# payload_option eval
+curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
+'{
+    "endpoint": {
+        "protocol": "socket",
+        "domain": "localhost",
+        "port": "4441"
+    },
+    "payload": ["[i for i in range(100)] #import"],
+    "payload_option": "eval",
+    "unexpected": ["[0, 1, 2, 3, 4, 5, 6, 7, 8, 9,"],
+    "unexpected_option": "plain",
+    "severity": "critical"
+}'
+
+# http (Error)
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
 '{
     "endpoint": {
@@ -88,7 +146,9 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "domain": "localhost",
         "port": "4445"
     },
-    "payload": ["q=<script>", "q=<script>&s=alert(1)</script>"], 
-    "unexpected": ["<script>alert(1)</script>"], 
-    "severity":"critical"
+    "payload": ["q=<script>","q=<script>&s=alert(1)</script>"],
+    "payload_option": "plain",
+    "unexpected": ["<script>alert(1)</script>"],
+    "unexpected_option": "plain",
+    "severity": "critical"
 }'

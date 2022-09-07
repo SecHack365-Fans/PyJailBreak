@@ -1,3 +1,4 @@
+import re
 import requests
 import urllib.parse
 from pwn import *
@@ -13,6 +14,31 @@ CORS(
         "http://localhost:3000",
     ],
 )
+
+
+####################################################################################################
+# Trueに設定するとpayload_option, unexpected_optionにregex及びevalが利用可能となる
+# バックエンドサーバのReDoSおよびRCEが可能となるため、ローカルでのみの利用を推奨
+privilege_mode = True
+####################################################################################################
+
+
+def response_check(response, unexpected, option):
+        for u in unexpected:
+            if privilege_mode and (option == "eval"):
+                print(f"[unexpected_option: eval] eval({u})")
+                if str(eval(u)) in response: # バックエンドサーバ内でのコード実行(注意)
+                    return True
+            elif privilege_mode and (option == "regex"):
+                print(f"[unexpected_option: regex] regex({u})")
+                print(re.search(u, response))
+                if re.search(u, response): # バックエンドサーバ内でのユーザ由来の正規表現(注意)
+                    return True
+            else:
+                if u in response:
+                    return True
+        return False
+
 
 def http_attack(data, protocol, method):
     try:
@@ -35,9 +61,8 @@ def http_attack(data, protocol, method):
                     timeout=wtime,
                 ).text
         # 期待していない文字列を検証
-        for u in data["unexpected"]:
-            if u in response:
-                status = data["severity"]
+        if response_check(response, data["unexpected"], data["unexpected_option"]):
+            status = data["severity"]
         # 結果を返す
         return jsonify({"success": True, "severity": status})
     except Exception as e:
@@ -58,9 +83,8 @@ def socket_attack(data):
             io.sendline(p.encode())
             response += io.recvrepeat(wtime).decode()
         # 期待していない文字列を検証
-        for u in data["unexpected"]:
-            if u in response:
-                status = data["severity"]
+        if response_check(response, data["unexpected"], data["unexpected_option"]):
+            status = data["severity"]
         # 検証先の接続を閉じる
         io.close()
         return jsonify({"success": True, "severity": status})
@@ -77,6 +101,11 @@ def scan():
     try:
         # POST Data 取得
         data = request.get_json()
+        # Payload の加工
+        if privilege_mode and (data["payload_option"] == "eval"):
+            for i in range(len(data["payload"])):
+                print(f"[payload_option: eval] eval({data['payload'][i]})")
+                data["payload"][i] = str(eval(data["payload"][i])) # バックエンドサーバ内でのコード実行(注意)
         # 検証対象の振り分け
         match data["endpoint"]["protocol"]:
             case "socket":
