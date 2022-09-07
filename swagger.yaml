@@ -57,9 +57,14 @@ paths:
                 - payload
                 - unexpected
             example:
-              endpoint: https://vulnable.com:8000
+              endpoint:
+                protocol: socket
+                domain: localhost
+                port: 4444
               payload: ["__import__('os').system('echo \"Expected String\"')"]
               unexpected: ["Error"]
+              payload_option: plain
+              unexpected_option: eval
       responses:
         "200":
           description: Success
