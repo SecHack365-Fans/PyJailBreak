@@ -5,7 +5,8 @@ import { RootState } from "./store";
 import { GridRowId } from "@mui/x-data-grid";
 
 type Url = {
-  open: boolean;
+  payloadOpen: boolean;
+  optionsOpen: boolean;
   gridRowId: GridRowId;
   mode: "payload" | "unexpected";
 };
@@ -26,7 +27,8 @@ type ModeActionT = {
 };
 
 const initialState: Url = {
-  open: false,
+  payloadOpen: false,
+  optionsOpen: false,
   gridRowId: 0,
   mode: "payload",
 };
@@ -38,8 +40,11 @@ export const endPointsSlice = createSlice({
     setRowId: (state, action: RowIdActionT) => {
       state.gridRowId = action.payload;
     },
-    setOpen: (state, action: OpenActionT) => {
-      state.open = action.payload;
+    setPayloadOpen: (state, action: OpenActionT) => {
+      state.payloadOpen = action.payload;
+    },
+    setOptionsOpen: (state, action: OpenActionT) => {
+      state.optionsOpen = action.payload;
     },
     setMode: (state, action: ModeActionT) => {
       state.mode = action.payload;
@@ -47,12 +52,15 @@ export const endPointsSlice = createSlice({
   },
 });
 
-export const { setRowId, setOpen, setMode } = endPointsSlice.actions;
+export const { setRowId, setPayloadOpen, setOptionsOpen, setMode } =
+  endPointsSlice.actions;
 
 export const getRowIdState = (state: RootState) =>
   state.payloadsDialogReducer.gridRowId;
-export const getOpenState = (state: RootState) =>
-  state.payloadsDialogReducer.open;
+export const getPayloadOpenState = (state: RootState) =>
+  state.payloadsDialogReducer.payloadOpen;
+export const getOptionsOpenState = (state: RootState) =>
+  state.payloadsDialogReducer.optionsOpen;
 export const getModeState = (state: RootState) =>
   state.payloadsDialogReducer.mode;
 

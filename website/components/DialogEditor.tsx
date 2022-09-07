@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, MenuItem } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -13,23 +13,24 @@ import { PayloadsT } from "../models/PayloadsT";
 import { getPayloads, setPayloads } from "../models/payloadsSlice";
 import {
   getModeState,
-  getOpenState,
+  getPayloadOpenState,
+  getOptionsOpenState,
   getRowIdState,
-} from "../models/payloadsDialogSlice";
+} from "../models/dialogSlice";
 
 type ParamsT = {
   handleClose: (rowId: GridRowId) => void;
 };
 
 // TODO: refactor onClick, onChange
-export const DialogEditor = (params: ParamsT) => {
+export const PayloadsEditor = (params: ParamsT) => {
   const [newText, setNewText] = React.useState("");
   const dispatch = useDispatch();
   const payloads: PayloadsT = useSelector(getPayloads);
-  const open = useSelector(getOpenState);
+  const open = useSelector(getPayloadOpenState);
   const rowId = useSelector(getRowIdState);
   const mode = useSelector(getModeState);
-  const title = (mode) =>
+  const title = (mode: "payload" | "unexpected") =>
     mode === "payload" ? "Payload" : "Unexpected Output";
   return (
     <Dialog
@@ -46,7 +47,7 @@ export const DialogEditor = (params: ParamsT) => {
       </DialogTitle>
       <DialogContent>
         <List>
-          {payloads[rowId][mode].map((payload, idx) => (
+          {payloads[rowId][mode].map((payload: string, idx: number) => (
             <ListItem key={idx}>
               <TextField
                 label={`${title(mode)} ${idx}`}
@@ -157,4 +158,99 @@ export const DialogEditor = (params: ParamsT) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+export const OptionsEditor = (params: ParamsT) => {
+  const dispatch = useDispatch();
+  const payloads: PayloadsT = useSelector(getPayloads);
+  const open = useSelector(getOptionsOpenState);
+  const rowId = useSelector(getRowIdState);
+  const textFieldStyle = {
+    maxWidth: "600px",
+    m: "1em 2px 0.5em 2px",
+  };
+  return (
+    <Dialog
+      open={open}
+      onClose={() => {
+        params.handleClose(rowId);
+      }}
+      fullWidth
+      maxWidth={"sm"}
+      sx={{ textAlign: "center" }}
+    >
+      <DialogTitle>Change Options #{rowId}</DialogTitle>
+      <DialogContent>
+        <h3>Payload Options</h3>
+        <TextField
+          select
+          variant="standard"
+          label="Payload Options"
+          value={payloads[rowId].payload_option ?? "none"}
+          onChange={(e) =>
+            dispatch(
+              setPayloads(changePayloadOptions(payloads, rowId, e.target.value))
+            )
+          }
+          sx={Object.assign({}, textFieldStyle, {
+            width: "25%",
+          })}
+        >
+          <MenuItem value="none">None</MenuItem>
+          <MenuItem value="eval">eval</MenuItem>
+          <MenuItem value="regex">regex</MenuItem>
+        </TextField>
+        <h3>Unexpected Options</h3>
+        <TextField
+          select
+          variant="standard"
+          label="Unexpected Options"
+          value={payloads[rowId].unexpected_option ?? "none"}
+          onChange={(e) =>
+            dispatch(
+              setPayloads(
+                changeUnexpectedOptions(payloads, rowId, e.target.value)
+              )
+            )
+          }
+          sx={Object.assign({}, textFieldStyle, {
+            width: "25%",
+          })}
+        >
+          <MenuItem value="none">None</MenuItem>
+          <MenuItem value="eval">eval</MenuItem>
+          <MenuItem value="regex">regex</MenuItem>
+        </TextField>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const changePayloadOptions = (
+  payloads: PayloadsT,
+  rowId: GridRowId,
+  option: string
+) => {
+  return [
+    ...payloads.slice(0, rowId as number),
+    {
+      ...payloads[rowId],
+      payload_option: option == "none" ? undefined : option,
+    },
+    ...payloads.slice((rowId as number) + 1),
+  ];
+};
+const changeUnexpectedOptions = (
+  payloads: PayloadsT,
+  rowId: GridRowId,
+  option: string
+) => {
+  return [
+    ...payloads.slice(0, rowId as number),
+    {
+      ...payloads[rowId],
+      unexpected_option: option,
+    },
+    ...payloads.slice((rowId as number) + 1),
+  ];
 };

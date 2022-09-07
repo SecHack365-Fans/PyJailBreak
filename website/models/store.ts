@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import endPointsReducer from "./endPointsSlice";
 import payloadsReducer from "./payloadsSlice";
-import payloadsDialogReducer from "./payloadsDialogSlice";
+import payloadsDialogReducer from "./dialogSlice";
 
 export const store = configureStore({
   reducer: {

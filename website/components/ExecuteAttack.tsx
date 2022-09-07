@@ -120,6 +120,8 @@ const executeAttack = async (
             domain: vulnDomain,
             port: vulnPort,
           },
+          payload_option: payload.payload_option,
+          unexpected_option: payload.unexpected_option,
         }),
       });
       if (!res.ok) {

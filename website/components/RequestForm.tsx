@@ -2,7 +2,7 @@
 
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
-import { DialogEditor } from "./DialogEditor";
+import { PayloadsEditor, OptionsEditor } from "./DialogEditor";
 import { TextField, Chip, Box, MenuItem } from "@mui/material";
 import {
   DataGrid,
@@ -23,7 +23,12 @@ import {
   setVulnDomain,
   setVulnPort,
 } from "../models/endPointsSlice";
-import { setOpen, setRowId, setMode } from "../models/payloadsDialogSlice";
+import {
+  setPayloadOpen,
+  setOptionsOpen,
+  setRowId,
+  setMode,
+} from "../models/dialogSlice";
 import {
   getPayloads,
   setSelections,
@@ -64,15 +69,20 @@ const RequestForm = () => {
     },
   };
   const handleDialogOpen = (
+    field: "payload" | "unexpected" | "options",
     gridRowId: GridRowId,
-    mode: "payload" | "unexpected"
+    mode?: "payload" | "unexpected"
   ) => {
-    dispatch(setOpen(true));
+    if (field == "payload" || field == "unexpected") {
+      dispatch(setPayloadOpen(true));
+      dispatch(setMode(mode));
+    } else if (field == "options") {
+      dispatch(setOptionsOpen(true));
+    }
     dispatch(setRowId(gridRowId));
-    dispatch(setMode(mode));
   };
-  const handleDialogClose = (gridRowId: GridRowId) => {
-    dispatch(setOpen(false));
+  const handlePayloadsDialogClose = (gridRowId: GridRowId) => {
+    dispatch(setPayloadOpen(false));
     const newPayloads = [
       ...payloads.slice(0, gridRowId as number),
       {
@@ -85,6 +95,10 @@ const RequestForm = () => {
     ];
     dispatch(setPayloads(newPayloads));
   };
+  const handleOptionsDialogClose = (gridRowId: GridRowId) => {
+    dispatch(setOptionsOpen(false));
+  };
+
   return (
     <div className={styles.body}>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -180,13 +194,16 @@ const RequestForm = () => {
           }}
           onCellClick={(params) => {
             if (params.field === "payload" || params.field === "unexpected") {
-              handleDialogOpen(params.id, params.field);
+              handleDialogOpen(params.field, params.id, params.field);
+            } else if (params.field === "options") {
+              handleDialogOpen(params.field, params.id);
             }
           }}
         />
       </div>
       <ExecuteAttack />
-      <DialogEditor handleClose={handleDialogClose} />
+      <PayloadsEditor handleClose={handlePayloadsDialogClose} />
+      <OptionsEditor handleClose={handleOptionsDialogClose} />
     </div>
   );
 };
@@ -202,7 +219,7 @@ const columns = (): GridColDef[] => {
   return [
     {
       field: "payload",
-      headerName: "Payload",
+      headerName: "Payloads",
       flex: 1,
       renderCell: (params: GridValueGetterParams) => (
         <span className={styles.scroll} style={{ padding: "2px" }}>
@@ -222,7 +239,6 @@ const columns = (): GridColDef[] => {
       headerName: "Unexpected Output",
       flex: 1,
       renderCell: (params: GridValueGetterParams) => (
-        // TODO: クリックできる場所の範囲を変更する
         <span className={styles.scroll} style={{ padding: "2px" }}>
           {params.row.unexpected.map((option: string, index: number) => (
             <Chip
@@ -256,6 +272,29 @@ const columns = (): GridColDef[] => {
       renderCell: (params: GridValueGetterParams) =>
         makeStatusChip(params.row.result).chip,
       sortComparator: resultsComparator,
+    },
+    {
+      field: "options",
+      headerName: "Options",
+      flex: 1,
+      maxWidth: 170,
+      renderCell: (params: GridValueGetterParams) => (
+        <span className={styles.scroll} style={{ padding: "2px" }}>
+          {[params.row.payload_option, params.row.unexpected_option].flatMap(
+            (option: string | undefined, index: number) =>
+              typeof option === "undefined" ? (
+                []
+              ) : (
+                <Chip
+                  key={index}
+                  variant="outlined"
+                  label={`${index === 0 ? "payload" : "unexpected"}:${option}`}
+                  sx={chipStyle}
+                />
+              )
+          )}
+        </span>
+      ),
     },
   ];
 };

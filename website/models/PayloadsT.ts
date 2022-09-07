@@ -14,6 +14,8 @@ const PayloadS = z.object({
   payload: z.string().array(),
   unexpected: z.string().array(),
   severity: SeverityS,
+  payload_option: z.enum(["plain", "eval", "regex"]).optional(),
+  unexpected_option: z.enum(["plain", "eval", "regex"]).optional(),
   result: SeverityS.optional(),
 } as const);
 export const PayloadsS = z.array(PayloadS.and(z.object({ id: z.number() })));
