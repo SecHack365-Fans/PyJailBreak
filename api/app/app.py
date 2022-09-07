@@ -24,20 +24,20 @@ privilege_mode = False
 
 
 def response_check(response, unexpected, option):
-        for u in unexpected:
-            if privilege_mode and (option == "eval"):
-                print(f"[unexpected_option: eval] eval({u})")
-                if str(eval(u)) in response: # バックエンドサーバ内でのコード実行(注意)
-                    return True
-            elif privilege_mode and (option == "regex"):
-                print(f"[unexpected_option: regex] regex({u})")
-                print(re.search(u, response))
-                if re.search(u, response): # バックエンドサーバ内でのユーザ由来の正規表現(注意)
-                    return True
-            else:
-                if u in response:
-                    return True
-        return False
+    for u in unexpected:
+        if privilege_mode and (option == "eval"):
+            print(f"[unexpected_option: eval] eval({u})")
+            if str(eval(u)) in response: # バックエンドサーバ内でのコード実行(注意)
+                return True
+        elif privilege_mode and (option == "regex"):
+            print(f"[unexpected_option: regex] regex({u})")
+            print(re.search(u, response))
+            if re.search(u, response): # バックエンドサーバ内でのユーザ由来の正規表現(注意)
+                return True
+        else:
+            if u in response:
+                return True
+    return False
 
 
 def http_attack(data, protocol, method):
