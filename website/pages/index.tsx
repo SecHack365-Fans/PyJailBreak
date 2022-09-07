@@ -21,7 +21,7 @@ const Home: NextPage = () => {
           is a <br />
           <b>Black box automated vulnerability scanning tool</b>
           <br />
-          for Python socket servers.
+          for Python servers.
         </div>
       </div>
       <div>

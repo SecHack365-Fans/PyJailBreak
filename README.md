@@ -8,4 +8,4 @@
 
 
 Python製Socketサーバに対するブラックボックス自動脆弱性スキャニングツール
-Black box automated vulnerability scanning tool for Python socket servers.
+Black box automated vulnerability scanning tool for Python servers.

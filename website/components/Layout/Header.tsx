@@ -8,7 +8,7 @@ interface Props {
 const Header: React.FC<Props> = ({ title, description }: Props) => {
   const defaultTitle = "PyJailBreak";
   const defaultDescription =
-    "Black box automated vulnerability scanning tool for Python socket servers";
+    "Black box automated vulnerability scanning tool for Python servers";
   const perfectTitle = title ?? defaultTitle;
   const perfectDescription = description ?? defaultDescription;
   return (
