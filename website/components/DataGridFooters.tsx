@@ -42,6 +42,8 @@ export const DataGridFooters = () => {
                   payload: payload.payload,
                   unexpected: payload.unexpected,
                   severity: payload.severity,
+                  payload_option: payload.payload_option,
+                  unexpected_option: payload.unexpected_option,
                 };
               }),
               "payloads.json"
