@@ -1,20 +1,21 @@
-# PyJailBreak バックエンド
+# PyJailBreak Backend
 
 下記URLまたはローカルで実行したフロントエンドにおいて、Endpoint for PyJailBreak Serverとして本プログラムを指定してください。  
 **[https://fans.sechack365.com/PyJailBreak/](https://fans.sechack365.com/PyJailBreak/)**  
 
-## 起動  
-```bash
-$ pip3 install -r ./app/requirements.txt
-$ python3 ./app/app.py
+## 起動
+
+```sh
+pip3 install -r ./app/requirements.txt
+python3 ./app/app.py
 ```
 
 ## Dockerコンテナとして起動  
 
 > **Warning**
-> 
+>
 > **バックエンドをDockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります**
 
-```bash
-$ docker-compose up
+```sh
+docker-compose up
 ```

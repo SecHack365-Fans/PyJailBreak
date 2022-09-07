@@ -1,20 +1,22 @@
-# やられサーバ集
+# Vulnerable Server Examples
 
 各やられサーバの一括起動  
 
-```bash
-$ docker-compose up
+```sh
+docker-compose up
 ```
 
 > **Warning**
-> 
+>
 > **[バックエンド](../api/)をDockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります**
 
-
 ## examples_01
-### 便利計算機アプリ  
-Port:`4441`  
-```bash
+
+### 便利計算機アプリ
+
+* Port: `4441`  
+
+```sh
 $ nc localhost 4441
 ----------Calculator----------
 <+> 0xff + 0o77 + 0b11
@@ -24,9 +26,12 @@ $ nc localhost 4441
 ```
 
 ## examples_02
-### 安全計算機アプリ  
-Port:`4442`  
-```bash
+
+### 安全計算機アプリ
+
+* Port:`4442`  
+
+```sh
 $ nc localhost 4442
 ----------Secure Calculator----------
 <SecCalc> 0xff + 0o77 + 0b11
@@ -36,9 +41,12 @@ Hi, Hacker !!!
 ```
 
 ## examples_03
-### [IMCTF 2021 printtext💘](https://github.com/satoki/imctf_2021_satoki_writeups/tree/main/misc/printtext)  
-Port:`4443`  
-```bash
+
+### [IMCTF 2021 printtext💘](https://github.com/satoki/imctf_2021_satoki_writeups/tree/main/misc/printtext)
+
+* Port: `4443`  
+
+```sh
 $ nc localhost 4443
 eval_code> print(text)
 Let’s roll!!
@@ -46,9 +54,12 @@ I don't have the flag.
 ```
 
 ## examples_04
-### [SECCON CTF 2021 hitchhike](https://ptr-yudai.hatenablog.com/entry/2021/12/19/232158#Misc-227pts-hitchhike)  
-Port:`4444`  
-```
+
+### [SECCON CTF 2021 hitchhike](https://ptr-yudai.hatenablog.com/entry/2021/12/19/232158#Misc-227pts-hitchhike)
+
+* Port: `4444`  
+
+```sh
 $ nc localhost 4444
 +---------------------------------------------------+
 | The Answer to the Ultimate Question of Life,      |
