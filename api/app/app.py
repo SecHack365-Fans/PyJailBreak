@@ -101,6 +101,12 @@ def scan():
     try:
         # POST Data 取得
         data = request.get_json()
+        
+        # unexpected_option の確認
+        data.setdefault("unexpected_option", "plain")
+        # payload_option の確認
+        data.setdefault("payload_option", "plain")
+        print(data)
         # Payload の加工
         if privilege_mode and (data["payload_option"] == "eval"):
             for i in range(len(data["payload"])):
