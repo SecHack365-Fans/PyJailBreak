@@ -3,7 +3,15 @@
 import React from "react";
 import ExecuteAttack from "./ExecuteAttack";
 import { PayloadsEditor, OptionsEditor } from "./DialogEditor";
-import { TextField, Chip, Box, MenuItem } from "@mui/material";
+import {
+  TextField,
+  Chip,
+  Box,
+  MenuItem,
+  FormGroup,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -34,12 +42,14 @@ import {
   setSelections,
   setPayloads,
 } from "../models/payloadsSlice";
+import { getIsEmulate, setEmulateMode } from "../models/emulateSlice";
 import { PayloadsT } from "../models/PayloadsT";
 import { DataGridFooters } from "./DataGridFooters";
 
 const RequestForm = () => {
   const dispatch = useDispatch();
   const apiUrl = useSelector(getAPIUrlState);
+  const isEmulate = useSelector(getIsEmulate);
   const protocol = useSelector(getProtocol);
   const vulnDomain = useSelector(getVulnDomain);
   const vulnPort = useSelector(getVulnPort);
@@ -201,6 +211,17 @@ const RequestForm = () => {
           }}
         />
       </div>
+      <FormGroup>
+        <FormControlLabel
+          control={<Switch defaultChecked />}
+          label="Emulate Mode"
+          sx={{ m: "0 auto" }}
+          checked={isEmulate}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            dispatch(setEmulateMode(e.target.checked))
+          }
+        />
+      </FormGroup>
       <ExecuteAttack />
       <PayloadsEditor handleClose={handlePayloadsDialogClose} />
       <OptionsEditor handleClose={handleOptionsDialogClose} />

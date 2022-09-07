@@ -15,8 +15,10 @@ import {
   getSelections,
   setPayloads,
 } from "../models/payloadsSlice";
+import { getIsEmulate } from "../models/emulateSlice";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  severities,
   PayloadsT,
   SeverityT,
   APIResponseS,
@@ -27,6 +29,7 @@ import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 const ExecuteAttack = () => {
   const apiUrl = useSelector(getAPIUrlState);
+  const isEmulate = useSelector(getIsEmulate);
   const protocol = useSelector(getProtocol);
   const vulnDomain = useSelector(getVulnDomain);
   const vulnPort = useSelector(getVulnPort);
@@ -42,6 +45,7 @@ const ExecuteAttack = () => {
         endIcon={<SendIcon />}
         onClick={() => {
           if (
+            // TODO: propsをpbjectにまとめる
             !validation(
               apiUrl,
               protocol,
@@ -53,6 +57,7 @@ const ExecuteAttack = () => {
           ) {
             executeAttack(
               apiUrl,
+              isEmulate,
               protocol,
               vulnDomain,
               vulnPort,
@@ -88,6 +93,7 @@ type ChangePointT = {
 
 const executeAttack = async (
   apiUrl: string,
+  isEmulate: boolean,
   protocol: string,
   vulnDomain: string,
   vulnPort: number,
@@ -106,40 +112,46 @@ const executeAttack = async (
     payloads = changePayloadStateExec(payloads, changePoint);
     dispatch(setPayloads(payloads));
     try {
-      const res = await fetch(`${apiUrl}/scan`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          payload: payload.payload,
-          unexpected: payload.unexpected,
-          severity: payload.severity,
-          endpoint: {
-            protocol: protocol,
-            domain: vulnDomain,
-            port: vulnPort,
+      const getSeverty = async () => {
+        const res = await fetch(`${apiUrl}/scan`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          payload_option: payload.payload_option,
-          unexpected_option: payload.unexpected_option,
-        }),
-      });
-      if (!res.ok) {
-        throw new Error(`${res.status} ${res.statusText}`);
-      }
-      const json: APIResponseT = await res.json();
-      console.log("API response: ", json);
-      const parseResult = APIResponseS.safeParse(json);
-      if (parseResult.success === false) {
-        console.error(parseResult.error);
-        throw new Error(`Internal Server Error`);
-      }
-      if (!json.success) {
-        throw new Error(json.error);
-      }
+          body: JSON.stringify({
+            payload: payload.payload,
+            unexpected: payload.unexpected,
+            severity: payload.severity,
+            endpoint: {
+              protocol: protocol,
+              domain: vulnDomain,
+              port: vulnPort,
+            },
+            payload_option: payload.payload_option,
+            unexpected_option: payload.unexpected_option,
+          }),
+        });
+        if (!res.ok) {
+          throw new Error(`${res.status} ${res.statusText}`);
+        }
+        const json: APIResponseT = await res.json();
+        console.log("API response: ", json);
+        const parseResult = APIResponseS.safeParse(json);
+        if (parseResult.success === false) {
+          console.error(parseResult.error);
+          throw new Error(`Internal Server Error`);
+        }
+        if (!json.success) {
+          throw new Error(json.error);
+        }
+        return json.severity;
+      };
+      const severity: SeverityT = !isEmulate
+        ? await getSeverty()
+        : await getRandomSeverity();
       const changePoint: ChangePointT = {
         id: selectedId,
-        severity: json.severity,
+        severity: severity,
       };
       payloads = changePayloadStateExec(payloads, changePoint);
       dispatch(setPayloads(payloads));
@@ -207,6 +219,15 @@ const changePayloadStateExec = (
     }
   });
   return newPayloads;
+};
+
+const getRandomSeverity = async () => {
+  const timeout = Math.floor(Math.random() * (1000 - 500) + 500);
+  await new Promise((resolve) => setTimeout(resolve, timeout));
+  const severity: SeverityT = severities.slice(0, 3)[
+    Math.floor(Math.random() * 3)
+  ];
+  return severity;
 };
 
 export default ExecuteAttack;

@@ -3,13 +3,14 @@
 import { z } from "zod";
 import { GridRowId } from "@mui/x-data-grid";
 
-const SeverityS = z.enum([
+export const severities = [
   "safe",
   "warning",
   "critical",
   "executing",
   "unknown",
-]);
+] as const;
+const SeverityS = z.enum(severities);
 const PayloadS = z.object({
   payload: z.string().array(),
   unexpected: z.string().array(),
