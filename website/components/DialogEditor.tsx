@@ -1,7 +1,13 @@
 /** @format */
 
 import React from "react";
-import { Dialog, DialogContent, DialogTitle, MenuItem } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Tooltip,
+} from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -17,6 +23,7 @@ import {
   getOptionsOpenState,
   getRowIdState,
 } from "../models/dialogSlice";
+import { HelpOutline } from "@mui/icons-material";
 
 type ParamsT = {
   handleClose: (rowId: GridRowId) => void;
@@ -197,7 +204,14 @@ export const OptionsEditor = (params: ParamsT) => {
           })}
         >
           <MenuItem value="none">None</MenuItem>
-          <MenuItem value="eval">eval</MenuItem>
+          <MenuItem value="eval">
+            <>
+              eval
+              <Tooltip title="Treats strings as Python scripts">
+                <HelpOutline sx={{ fontSize: "1em", ml: "2px" }} />
+              </Tooltip>
+            </>
+          </MenuItem>
         </TextField>
         <h3>Unexpected Options</h3>
         <TextField
@@ -217,8 +231,22 @@ export const OptionsEditor = (params: ParamsT) => {
           })}
         >
           <MenuItem value="none">None</MenuItem>
-          <MenuItem value="eval">eval</MenuItem>
-          <MenuItem value="regex">regex</MenuItem>
+          <MenuItem value="eval">
+            <>
+              eval
+              <Tooltip title="Treats strings as Python scripts">
+                <HelpOutline sx={{ fontSize: "1em", ml: "2px" }} />
+              </Tooltip>
+            </>
+          </MenuItem>
+          <MenuItem value="regex">
+            <>
+              regex
+              <Tooltip title="Treats strings as Regex">
+                <HelpOutline sx={{ fontSize: "1em", ml: "2px" }} />
+              </Tooltip>
+            </>
+          </MenuItem>
         </TextField>
       </DialogContent>
     </Dialog>
