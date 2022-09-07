@@ -10,8 +10,7 @@
 #        "port": "4444"
 #    },
 #    "payload": ["help()","os",":!printenv"],
-#    "payload_option": "plain",
-#    "unexpected": ["PyJailBreak_b981a35bde"],
+##    "unexpected": ["PyJailBreak_b981a35bde"],
 #    "unexpected_option": "plain",
 #    "severity": "critical"
 # }
@@ -30,9 +29,7 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4441"
     },
     "payload": ["77*77"],
-    "payload_option": "plain",
     "unexpected": ["5929"],
-    "unexpected_option": "plain",
     "severity": "safe"
 }'
 curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
@@ -43,7 +40,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4441"
     },
     "payload": ["__import__(\"os\").system(\"printenv\")"],
-    "payload_option": "plain",
     "unexpected": ["PyJailBreak_b981a35bde"],
     "unexpected_option": "plain",
     "severity": "critical"
@@ -58,7 +54,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4441"
     },
     "payload": ["print(\"Satoki\")"],
-    "payload_option": "plain",
     "unexpected": ["Satoki"],
     "unexpected_option": "plain",
     "severity": "warning"
@@ -73,7 +68,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4443"
     },
     "payload": ["exec(chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(111+1)+chr(111)+chr(111+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111)+chr(111+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1)+chr(11+11+11+11+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1+1+1+1+1+1)+chr(111+1+1+1+1)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(111+1)+chr(111+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1)+chr(11+11+11+11+11+11+11+11+11+1+1)+chr(11+11+11+11+11+11+11+11+11+11)+chr(111+1+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1)+chr(11+11+11+1+1+1+1+1+1+1+1))"],
-    "payload_option": "plain",
     "unexpected": ["PyJailBreak_b981a35bde"],
     "unexpected_option": "plain",
     "severity": "critical"
@@ -87,7 +81,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4444"
     },
     "payload": ["help()","os",":!printenv"],
-    "payload_option": "plain",
     "unexpected": ["PyJailBreak_b981a35bde"],
     "unexpected_option": "plain",
     "severity": "critical"
@@ -102,7 +95,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4441"
     },
     "payload": ["77*77"],
-    "payload_option": "plain",
     "unexpected": ["[259]{4}"],
     "unexpected_option": "regex",
     "severity": "critical"
@@ -117,7 +109,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4441"
     },
     "payload": ["77*77"],
-    "payload_option": "plain",
     "unexpected": ["77*77"],
     "unexpected_option": "eval",
     "severity": "critical"
@@ -147,7 +138,6 @@ curl -X POST -H 'Content-Type: application/json' http://localhost:8080/scan -d \
         "port": "4445"
     },
     "payload": ["q=<script>","q=<script>&s=alert(1)</script>"],
-    "payload_option": "plain",
     "unexpected": ["<script>alert(1)</script>"],
     "unexpected_option": "plain",
     "severity": "critical"
