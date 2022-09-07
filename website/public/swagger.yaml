@@ -42,7 +42,7 @@ paths:
                   example: ["__import__('os').system('echo \"Expected String\"')"]
                 payload_option:
                   type: string
-                  enum: [plain, eval, regex]
+                  enum: [plain, eval]
                 unexpected:
                   type: array
                   items:

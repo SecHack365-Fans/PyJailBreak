@@ -198,7 +198,6 @@ export const OptionsEditor = (params: ParamsT) => {
         >
           <MenuItem value="none">None</MenuItem>
           <MenuItem value="eval">eval</MenuItem>
-          <MenuItem value="regex">regex</MenuItem>
         </TextField>
         <h3>Unexpected Options</h3>
         <TextField

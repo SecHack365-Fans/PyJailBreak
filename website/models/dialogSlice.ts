@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { GridRowId } from "@mui/x-data-grid";
 
-type Url = {
+type DialogT = {
   payloadOpen: boolean;
   optionsOpen: boolean;
   gridRowId: GridRowId;
@@ -26,7 +26,7 @@ type ModeActionT = {
   payload: "payload" | "unexpected";
 };
 
-const initialState: Url = {
+const initialState: DialogT = {
   payloadOpen: false,
   optionsOpen: false,
   gridRowId: 0,
