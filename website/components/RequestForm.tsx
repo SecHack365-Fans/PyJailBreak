@@ -11,6 +11,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
+  Tooltip,
 } from "@mui/material";
 import {
   DataGrid,
@@ -45,6 +46,7 @@ import {
 import { getIsEmulate, setEmulateMode } from "../models/emulateSlice";
 import { PayloadsT } from "../models/PayloadsT";
 import { DataGridFooters } from "./DataGridFooters";
+import { HelpOutline } from "@mui/icons-material";
 
 const RequestForm = () => {
   const dispatch = useDispatch();
@@ -212,17 +214,24 @@ const RequestForm = () => {
         />
       </div>
       <FormGroup>
+        <ExecuteAttack />
         <FormControlLabel
           control={<Switch defaultChecked />}
-          label="Emulate Mode"
-          sx={{ m: "0 auto" }}
+          label={
+            <>
+              Emulate Mode
+              <Tooltip title="サーバへ実際にリクエストが送られず、リクエストが送られた時のUIをエミュレートするモードです">
+                <HelpOutline sx={{ fontSize: "1em", ml: "2px" }} />
+              </Tooltip>
+            </>
+          }
+          sx={{ m: "0 auto", "& .MuiTypography-root": { color: "#ccc" } }}
           checked={isEmulate}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             dispatch(setEmulateMode(e.target.checked))
           }
         />
       </FormGroup>
-      <ExecuteAttack />
       <PayloadsEditor handleClose={handlePayloadsDialogClose} />
       <OptionsEditor handleClose={handleOptionsDialogClose} />
     </div>
