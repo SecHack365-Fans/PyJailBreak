@@ -31,7 +31,7 @@ type vulnPortActionT = {
 };
 
 const initialState: Url = {
-  APIUrl: "http://192.168.11.9:8080", // バックエンドのエンドポイント
+  APIUrl: "http://localhost:8080", // バックエンドのエンドポイント
   protocol: "socket",
   vulnDomain: "localhost", // やられサーバのホスト
   vulnPort: 4444, // やられサーバのポート
