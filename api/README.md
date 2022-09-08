@@ -12,9 +12,9 @@ python3 ./app/app.py
 
 ## Dockerコンテナとして起動  
 
-> **Warning**
+> **Note**
 >
-> **バックエンドをDockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります**
+> バックエンドをDockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります
 
 ```sh
 docker-compose up

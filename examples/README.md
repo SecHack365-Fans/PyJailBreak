@@ -1,18 +1,24 @@
 # Vulnerable Server Examples
 
+> **Warning**  
+> **本ディレクトリ下のアプリケーションはすべてRCEもしくはそれに近い脆弱性を持つものとなっています。**  
+> **実際のサービスとしてのご利用にはご注意ください。**  
+
+---
+
 各やられサーバの一括起動  
 
 ```sh
 docker-compose up
 ```
 
-> **Warning**
+> **Note**
 >
-> **[バックエンド](../api/)をDockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります**
+> [バックエンド](../api/)をDockerで動かす場合、`localhost`は`host.docker.internal`または`gateway.docker.internal`となります
 
 ## examples_01
 
-### 便利計算機アプリ
+### 計算機アプリ1
 
 * Port: `4441`  
 
@@ -27,7 +33,7 @@ $ nc localhost 4441
 
 ## examples_02
 
-### 安全計算機アプリ
+### 計算機アプリ2
 
 * Port:`4442`  
 
