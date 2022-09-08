@@ -30,4 +30,3 @@
 <div align="center">
   <img src="./assets/architecture.png" width="80%" />
 </div>
-
