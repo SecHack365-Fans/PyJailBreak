@@ -23,4 +23,4 @@
 
 ## Vulnerable Server Examples
 
-* [document](api/README.md)
+* [document](examples/README.md)
