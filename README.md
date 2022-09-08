@@ -27,3 +27,10 @@ Black box automated vulnerability scanning tool for Python servers.
 ## Vulnerable Server Examples
 
 * [document](api/README.md)
+
+## Architecture
+
+<div align="center">
+  <img src="./assets/architecture.png" width="80%" />
+</div>
+
