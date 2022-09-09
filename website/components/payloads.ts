@@ -56,14 +56,14 @@ export const defaultPayloads: PayloadsT = // TODO: payloads.jsonから読み込�
         severity: "critical",
       },
       {
-        payload: ['ｅｘｅｃ(ｉｎｐｕｔ())','import os; os.system("printenv")'],
+        payload: ['ｅｘｅｃ(ｉｎｐｕｔ())', 'import os; os.system("printenv")'],
         unexpected: ["PyJailBreak_b981a35bde"],
         severity: "critical",
       },
       {
-        payload: ['name=<script>alert(1)<script>'],
-        unexpected: ["<script>alert(1)<script>"],
-        severity: "critical",
+        payload: ['name=<script>alert(1)<script>', 'name=<img src=1 onerror=alert(2)>'],
+        unexpected: ["<script>alert(1)<script>", 'name=<img src=1 onerror=alert(2)>'],
+        severity: "warning",
       },
       {
         payload: ['name={{get_flashed_messages.__class__.__mro__[1].__subclasses__()[132].__init__.__globals__["sys"].modules["os"].popen("printenv").read()}}'],
