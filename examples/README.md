@@ -81,3 +81,16 @@ Traceback (most recent call last):
   File "<string>", line 1, in <module>
 TypeError: unsupported operand type(s) for *: 'dict' and 'int'
 ```
+
+## examples_05
+
+### 挨拶Webアプリ
+
+* Port:`4445`  
+
+```sh
+$ curl http://localhost:4445?name=hacker
+
+こんにちはhackerさん。<br>
+このサイトは脆弱ですか？<br>
+```
