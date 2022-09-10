@@ -62,7 +62,7 @@ export const defaultPayloads: PayloadsT = // TODO: payloads.jsonから読み込�
       },
       {
         payload: ['name=<script>alert(1)<script>', 'name=<img src=1 onerror=alert(2)>'],
-        unexpected: ["<script>alert(1)<script>", 'name=<img src=1 onerror=alert(2)>'],
+        unexpected: ["<script>alert(1)<script>", '<img src=1 onerror=alert(2)>'],
         severity: "warning",
       },
       {
